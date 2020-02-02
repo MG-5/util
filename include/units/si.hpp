@@ -37,6 +37,8 @@ public:
     }
 };
 
+// Arithmetic operators:
+
 template <int M, int Kg, int S, int A, int K, int Mo, int C>
 constexpr Value<SiUnit<M, Kg, S, A, K, Mo, C>>
 operator-(const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &op) noexcept
@@ -78,5 +80,55 @@ operator/(const Value<SiUnit<M1, Kg1, S1, A1, K1, Mo1, C1>> &lhs,
 {
     return Value<SiUnit<M1 - M2, Kg1 - Kg2, S1 - S2, A1 - A2, K1 - K2, Mo1 - Mo2, C1 - C2>>(
         lhs.getMagnitude() / rhs.getMagnitude());
+}
+
+// Comparison operators:
+
+template <int M, int Kg, int S, int A, int K, int Mo, int C>
+constexpr bool
+operator<(const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &lhs,
+          const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &rhs)
+{
+    return lhs.getMagnitude() < rhs.getMagnitude();
+}
+
+template <int M, int Kg, int S, int A, int K, int Mo, int C>
+constexpr bool
+operator<=(const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &lhs,
+           const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &rhs)
+{
+    return lhs.getMagnitude() <= rhs.getMagnitude();
+}
+
+template <int M, int Kg, int S, int A, int K, int Mo, int C>
+constexpr bool
+operator>(const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &lhs,
+          const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &rhs)
+{
+    return lhs.getMagnitude() > rhs.getMagnitude();
+}
+
+template <int M, int Kg, int S, int A, int K, int Mo, int C>
+constexpr bool
+operator>=(const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &lhs,
+           const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &rhs)
+{
+    return lhs.getMagnitude() >= rhs.getMagnitude();
+}
+
+template <int M, int Kg, int S, int A, int K, int Mo, int C>
+constexpr bool
+operator==(const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &lhs,
+           const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &rhs)
+{
+    return lhs.getMagnitude() == rhs.getMagnitude();
+}
+
+template <int M, int Kg, int S, int A, int K, int Mo, int C>
+constexpr bool
+operator!=(const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &lhs,
+           const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &rhs)
+{
+    return lhs.getMagnitude() != rhs.getMagnitude();
 }
 } // namespace units
