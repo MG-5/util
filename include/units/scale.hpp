@@ -25,4 +25,4 @@ public:
 private:
     const float factor;
 };
-}
+} // namespace units
