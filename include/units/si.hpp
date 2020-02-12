@@ -26,8 +26,7 @@ private:
     float magnitude{0};
 
 public:
-    constexpr explicit Value(const float magnitude) noexcept
-        : magnitude{magnitude}
+    constexpr explicit Value(const float magnitude) noexcept : magnitude{magnitude}
     {
     }
 
@@ -36,6 +35,29 @@ public:
         return magnitude;
     }
 };
+
+// Scalar operations:
+
+template <int M, int Kg, int S, int A, int K, int Mo, int C, typename T>
+constexpr Value<SiUnit<M, Kg, S, A, K, Mo, C>>
+operator*(const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &lhs, const T &rhs)
+{
+    return Value<SiUnit<M, Kg, S, A, K, Mo, C>>(lhs.getMagnitude() * rhs);
+}
+
+template <int M, int Kg, int S, int A, int K, int Mo, int C, typename T>
+constexpr Value<SiUnit<M, Kg, S, A, K, Mo, C>>
+operator*(const T &lhs, const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &rhs)
+{
+    return Value<SiUnit<M, Kg, S, A, K, Mo, C>>(rhs.getMagnitude() * lhs);
+}
+
+template <int M, int Kg, int S, int A, int K, int Mo, int C, typename T>
+constexpr Value<SiUnit<M, Kg, S, A, K, Mo, C>>
+operator/(const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &lhs, const T &rhs)
+{
+    return Value<SiUnit<M, Kg, S, A, K, Mo, C>>(lhs.getMagnitude() / rhs);
+}
 
 // Arithmetic operators:
 
@@ -85,49 +107,43 @@ operator/(const Value<SiUnit<M1, Kg1, S1, A1, K1, Mo1, C1>> &lhs,
 // Comparison operators:
 
 template <int M, int Kg, int S, int A, int K, int Mo, int C>
-constexpr bool
-operator<(const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &lhs,
-          const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &rhs)
+constexpr bool operator<(const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &lhs,
+                         const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &rhs)
 {
     return lhs.getMagnitude() < rhs.getMagnitude();
 }
 
 template <int M, int Kg, int S, int A, int K, int Mo, int C>
-constexpr bool
-operator<=(const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &lhs,
-           const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &rhs)
+constexpr bool operator<=(const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &lhs,
+                          const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &rhs)
 {
     return lhs.getMagnitude() <= rhs.getMagnitude();
 }
 
 template <int M, int Kg, int S, int A, int K, int Mo, int C>
-constexpr bool
-operator>(const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &lhs,
-          const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &rhs)
+constexpr bool operator>(const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &lhs,
+                         const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &rhs)
 {
     return lhs.getMagnitude() > rhs.getMagnitude();
 }
 
 template <int M, int Kg, int S, int A, int K, int Mo, int C>
-constexpr bool
-operator>=(const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &lhs,
-           const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &rhs)
+constexpr bool operator>=(const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &lhs,
+                          const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &rhs)
 {
     return lhs.getMagnitude() >= rhs.getMagnitude();
 }
 
 template <int M, int Kg, int S, int A, int K, int Mo, int C>
-constexpr bool
-operator==(const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &lhs,
-           const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &rhs)
+constexpr bool operator==(const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &lhs,
+                          const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &rhs)
 {
     return lhs.getMagnitude() == rhs.getMagnitude();
 }
 
 template <int M, int Kg, int S, int A, int K, int Mo, int C>
-constexpr bool
-operator!=(const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &lhs,
-           const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &rhs)
+constexpr bool operator!=(const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &lhs,
+                          const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &rhs)
 {
     return lhs.getMagnitude() != rhs.getMagnitude();
 }
