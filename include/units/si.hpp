@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <type_traits>
 
 namespace units
 {
@@ -30,9 +31,13 @@ public:
     {
     }
 
-    constexpr float getMagnitude() const noexcept
+    template <typename Type = float>
+    constexpr Type getMagnitude() const noexcept
     {
-        return magnitude;
+        if constexpr (std::is_same<Type, float>::value)
+            return magnitude;
+        else
+            return static_cast<Type>(magnitude);
     }
 };
 
