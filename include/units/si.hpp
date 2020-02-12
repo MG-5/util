@@ -1,25 +1,12 @@
 #pragma once
 
+#include "units/scale.hpp"
+#include "units/si_unit.hpp"
 #include <cstdint>
 #include <type_traits>
 
 namespace units
 {
-template <int M, int Kg, int S, int A, int K, int Mo, int C>
-struct SiUnit
-{
-    enum
-    {
-        metre = M,
-        kilogram = Kg,
-        second = S,
-        ampere = A,
-        kelvin = K,
-        mole = Mo,
-        candela = C
-    };
-};
-
 template <typename SiUnit>
 class Value
 {
@@ -27,6 +14,8 @@ private:
     float magnitude{0};
 
 public:
+    using Unit = SiUnit;
+
     constexpr explicit Value(const float magnitude) noexcept : magnitude{magnitude}
     {
     }
@@ -38,6 +27,18 @@ public:
             return magnitude;
         else
             return static_cast<Type>(magnitude);
+    }
+
+    template <typename Type = float, typename ScaleSiUnit>
+    constexpr Type getMagnitude(const Scale<ScaleSiUnit> scale) const noexcept
+    {
+        static_assert(std::is_same<SiUnit, ScaleSiUnit>::value,
+                      "Scale has incompatible underlying SI unit");
+
+        if constexpr (std::is_same<Type, float>::value)
+            return magnitude * scale.getScalingFactor();
+        else
+            return static_cast<Type>(magnitude * scale.getScalingFactor());
     }
 };
 
