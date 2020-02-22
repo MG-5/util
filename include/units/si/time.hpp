@@ -15,6 +15,15 @@ namespace units::si
 using Time = Value<SiUnit<0, 0, 1, 0, 0, 0, 0>>;
 } // namespace units::si
 
+namespace units::si::scale
+{
+constexpr auto h = Scale<Time::Unit>{1 / static_cast<float>(SecondsPerHour)};
+constexpr auto min = Scale<Time::Unit>{1 / static_cast<float>(SecondsPerMinute)};
+constexpr auto ms = Scale<Time::Unit>{prefixes::inverse::milli};
+constexpr auto us = Scale<Time::Unit>{prefixes::inverse::micro};
+constexpr auto ns = Scale<Time::Unit>{prefixes::inverse::nano};
+} // namespace units::si::scale
+
 constexpr units::si::Time operator"" _us(const long double magnitude)
 {
     return units::si::Time(magnitude / MicrosecondsPerSecond);
