@@ -1,6 +1,8 @@
 #pragma once
 
+#include "units/scale.hpp"
 #include "units/si.hpp"
+#include "units/si_prefixes.hpp"
 
 namespace
 {
