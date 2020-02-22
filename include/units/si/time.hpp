@@ -30,7 +30,7 @@ constexpr units::si::Time operator"" _s(const long double magnitude)
     return units::si::Time(magnitude);
 }
 
-constexpr units::si::Time operator"" _m(const long double magnitude)
+constexpr units::si::Time operator"" _min(const long double magnitude)
 {
     return units::si::Time(magnitude * SecondsPerMinute);
 }
