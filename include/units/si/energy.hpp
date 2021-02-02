@@ -14,10 +14,10 @@ constexpr auto Wh = Scale<Energy::Unit>{1 / static_cast<float>(SecondsPerHour)};
 
 constexpr units::si::Energy operator""_Ws(const long double magnitude)
 {
-    return units::si::Energy{magnitude};
+    return units::si::Energy(magnitude);
 }
 
 constexpr units::si::Energy operator""_Wh(const long double magnitude)
 {
-    return units::si::Energy{3600.0f * magnitude};
+    return units::si::Energy(3600.0f * magnitude);
 }
