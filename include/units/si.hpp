@@ -139,6 +139,21 @@ operator-=(Value<SiUnit<M, Kg, S, A, K, Mo, C>> &lhs,
     return lhs;
 }
 
+template <int M, int Kg, int S, int A, int K, int Mo, int C>
+constexpr Value<SiUnit<M, Kg, S , A, K, Mo, C>>
+sign(const Value<SiUnit<M, Kg, S , A, K, Mo, C>> &v) noexcept
+{
+    return Value<SiUnit<M, Kg, S , A, K, Mo, C>>(v.getMagnitude() > 0.0 ? 1.0 : -1.0);
+}
+
+template <int M, int Kg, int S, int A, int K, int Mo, int C>
+int
+signInt(const Value<SiUnit<M, Kg, S , A, K, Mo, C>> &v) noexcept
+{
+    return v.getMagnitude() > 0.0 ? 1 : -1;
+}
+
+
 // Comparison operators:
 
 template <int M, int Kg, int S, int A, int K, int Mo, int C>
