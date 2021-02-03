@@ -13,7 +13,7 @@ public:
     static constexpr State High = true;
 
 public:
-    Gpio(GPIO_TypeDef *port, uint16_t pin) : port{port}, pin{pin}
+    constexpr Gpio(GPIO_TypeDef *port, uint16_t pin) : port{port}, pin{pin}
     {
     }
 
