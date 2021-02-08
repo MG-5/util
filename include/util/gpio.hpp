@@ -27,6 +27,11 @@ public:
         HAL_GPIO_WritePin(port, pin, state == Low ? GPIO_PIN_RESET : GPIO_PIN_SET);
     }
 
+    void toggle()
+    {
+        HAL_GPIO_TogglePin(port, pin);
+    }
+
 private:
     GPIO_TypeDef *const port;
     const uint16_t pin;
