@@ -6,9 +6,19 @@
 #include <FreeRTOS.h>
 #include <cstdint>
 
+constexpr uint32_t toMilliSeconds(const units::si::Time time)
+{
+    return time.getMagnitude<uint32_t>(units::si::scale::ms);
+}
+
+constexpr uint32_t toMilliSeconds(const units::si::Frequency frequency)
+{
+    return toMilliSeconds(1_ / frequency);
+}
+
 constexpr TickType_t toOsTicks(const units::si::Time time)
 {
-    return pdMS_TO_TICKS(time.getMagnitude<uint32_t>(units::si::scale::ms));
+    return pdMS_TO_TICKS(toMilliSeconds(time));
 }
 
 constexpr TickType_t toOsTicks(const units::si::Frequency frequency)
