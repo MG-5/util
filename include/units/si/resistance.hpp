@@ -29,22 +29,22 @@ constexpr units::si::Resistance operator""_Ohm(const unsigned long long int magn
 
 constexpr units::si::Resistance operator"" _MOhm(const long double magnitude)
 {
-    return units::si::Resistance(magnitude * units::si::prefixes::inverse::mega);
+    return units::si::Resistance(magnitude * units::si::prefixes::mega);
 }
 
 constexpr units::si::Resistance operator"" _MOhm(const unsigned long long int magnitude)
 {
-    return units::si::Resistance(magnitude * units::si::prefixes::inverse::mega);
+    return units::si::Resistance(magnitude * units::si::prefixes::mega);
 }
 
 constexpr units::si::Resistance operator"" _kOhm(const long double magnitude)
 {
-    return units::si::Resistance(magnitude * units::si::prefixes::inverse::kilo);
+    return units::si::Resistance(magnitude * units::si::prefixes::kilo);
 }
 
 constexpr units::si::Resistance operator"" _kOhm(const unsigned long long int magnitude)
 {
-    return units::si::Resistance(magnitude * units::si::prefixes::inverse::kilo);
+    return units::si::Resistance(magnitude * units::si::prefixes::kilo);
 }
 
 constexpr units::si::Resistance operator"" _mOhm(const long double magnitude)
