@@ -1,6 +1,7 @@
 #pragma once
 
 #include "units/si.hpp"
+#include "units/si/time.hpp"
 
 namespace units::si
 {
