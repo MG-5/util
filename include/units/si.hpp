@@ -1,5 +1,6 @@
 #pragma once
 
+#include "units/offset.hpp"
 #include "units/scale.hpp"
 #include "units/si_unit.hpp"
 #include <cstdint>
@@ -39,6 +40,18 @@ public:
             return magnitude * scale.getScalingFactor();
         else
             return static_cast<Type>(magnitude * scale.getScalingFactor());
+    }
+
+    template <typename Type = float, typename OffsetSiUnit>
+    constexpr Type getMagnitude(const Offset<OffsetSiUnit> offset) const noexcept
+    {
+        static_assert(std::is_same<SiUnit, OffsetSiUnit>::value,
+                      "Offset has incompatible underlying SI unit");
+
+        if constexpr (std::is_same<Type, float>::value)
+            return magnitude + offset.getOffset();
+        else
+            return static_cast<Type>(magnitude + offset.getOffset());
     }
 
     template <typename Type = float>
