@@ -1,5 +1,7 @@
 #include <util/Button.hpp>
 
+namespace util
+{
 void Button::update(const units::si::Time timePassed)
 {
     State state = buttonGpio.read() ? State::NotPressed : State::Pressed;
@@ -56,3 +58,4 @@ units::si::Time Button::getPassedTime() const
 {
     return pressTimer;
 }
+} // namespace util

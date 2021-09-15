@@ -3,6 +3,8 @@
 #include "gpio.hpp"
 #include <units/si/time.hpp>
 
+namespace util
+{
 class Button
 {
 public:
@@ -51,3 +53,4 @@ private:
     InternalState internalState = InternalState::Idle;
     units::si::Time pressTimer = TimerReloadValue;
 };
+} // namespace util
