@@ -17,6 +17,10 @@ private:
 public:
     using Unit = SiUnit;
 
+    constexpr explicit Value() noexcept : magnitude{0.0}
+    {
+    }
+
     constexpr explicit Value(const float magnitude) noexcept : magnitude{magnitude}
     {
     }
