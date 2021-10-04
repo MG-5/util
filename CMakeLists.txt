@@ -10,4 +10,4 @@ target_include_directories(${PROJECT_NAME} PUBLIC
         include
         )
 
-target_link_libraries(${PROJECT_NAME} freertos)
+target_link_libraries(${PROJECT_NAME} freertos core)
