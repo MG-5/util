@@ -91,6 +91,7 @@ protected:
     units::si::Frequency blinkFrequency = 1.0_Hz;
 };
 
+//--------------------------------------------------------------------------------------------------
 class MultiColorLedBase : public LedBase
 {
 public:
@@ -113,6 +114,7 @@ protected:
 
 namespace binary_led
 {
+//--------------------------------------------------------------------------------------------------
 class SingleLed : public LedBase
 {
 public:
@@ -138,6 +140,8 @@ enum class DualLedColor
     Green,
     Yellow
 };
+
+//--------------------------------------------------------------------------------------------------
 
 /// only for red and green LEDs in bundle
 class DualLed : public MultiColorLedBase
@@ -175,6 +179,8 @@ private:
 
 namespace pwm_led
 {
+
+//--------------------------------------------------------------------------------------------------
 template <typename TimerResolution>
 class SingleLed : public LedBase
 {
@@ -196,6 +202,7 @@ private:
     PwmOutput<TimerResolution> pwmOutput;
 };
 
+//--------------------------------------------------------------------------------------------------
 enum class DualLedColor
 {
     Red,
@@ -204,6 +211,7 @@ enum class DualLedColor
     Orange
 };
 
+//--------------------------------------------------------------------------------------------------
 template <typename TimerResolution>
 class DualLed : public MultiColorLedBase
 {
@@ -263,6 +271,7 @@ private:
     DualLedColor color = DualLedColor::Red;
 };
 
+//--------------------------------------------------------------------------------------------------
 enum class TripleLedColor
 {
     Red,
@@ -274,6 +283,7 @@ enum class TripleLedColor
     Turquoise
 };
 
+//--------------------------------------------------------------------------------------------------
 template <typename TimerResolution>
 class TripleLed : public MultiColorLedBase
 {
