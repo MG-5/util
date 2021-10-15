@@ -13,21 +13,21 @@ class LedBase
 public:
     virtual ~LedBase() = default;
 
-    /// Turn on LED, will call the inherited turn on process of derived class.
-    void turnOn()
+    /// Turns on LED, will call the inherited turn on process of derived class.
+    virtual void turnOn() final
     {
         ledState = LedState::Normal;
         turnOnInherited();
     }
 
-    /// Turn off LED, will call the inherited turn off process of derived class.
-    void turnOff()
+    /// Turns off LED, will call the inherited turn off process of derived class.
+    virtual void turnOff() final
     {
         ledState = LedState::Normal;
         turnOffInherited();
     }
 
-    /// Enable blinking at given frequency.
+    /// Enables blinking at given frequency.
     /// To turn off blinking simply use turnOn()/turnOff() functions.
     /// \param frequency Blink frequency - 50% of period time will be on/off
     void setBlinking(units::si::Frequency frequency)
@@ -36,7 +36,8 @@ public:
         this->blinkFrequency = frequency;
     }
 
-    /// Enable flashing.
+    /// Enables flashing.
+    /// It fires two flashs every second.
     /// To turn off flashing simply use turnOn()/turnOff() functions.
     void setFlashing()
     {
