@@ -7,7 +7,7 @@
 
 #### binary led
 A LED can be controlled by simply turning it on or off, without dimming.
-This can be represented by `util::binary_led::SingleLed` with `utils::Gpio` as parameter:
+This can be represented by `util::binary_led::SingleLed` with `util::Gpio` as parameter:
 
 ```cpp
 #include "util/Led.hpp"
@@ -19,16 +19,16 @@ util::binary_led::SingleLed testLed(TestLedGpio);
 #### pwm led
 
 For a multicolor LED it make more sense to controll each LED by PWM to get a various color mixings.
-For instance a RGB LED can be represented by `util::pwm_led::TripleLed` with three `utils::PwmOutput8Bit` (for 8-Bit PWM timer) as parameter:
+For instance a RGB LED can be represented by `util::pwm_led::TripleLed` with three `util::PwmOutput8Bit` (for 8-Bit PWM timer) as parameter:
 
 ```cpp
 #include "util/Led.hpp"
 
 constexpr auto TimerHandle = &htim1;
 
-constexpr PwmOutput8Bit RedChannel(TimerHandle, TIM_CHANNEL_1);
-constexpr PwmOutput8Bit GreenChannel(TimerHandle, TIM_CHANNEL_2);
-constexpr PwmOutput8Bit BlueChannel(TimerHandle, TIM_CHANNEL_3);
+constexpr util::PwmOutput8Bit RedChannel(TimerHandle, TIM_CHANNEL_1);
+constexpr util::PwmOutput8Bit GreenChannel(TimerHandle, TIM_CHANNEL_2);
+constexpr util::PwmOutput8Bit BlueChannel(TimerHandle, TIM_CHANNEL_3);
 
 util::pwm_led::TripleLed rgbLed(RedChannel, GreenChannel, BlueChannel);
 
