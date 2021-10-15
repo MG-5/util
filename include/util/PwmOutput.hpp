@@ -1,4 +1,5 @@
 #pragma once
+#include <core/BuildConfiguration.hpp>
 #include <hal_header.h>
 
 #include <limits>
@@ -19,13 +20,17 @@ public:
 
     void setPwmValue(TimerResolution pwmValue) const
     {
-        __HAL_TIM_SET_COMPARE(TimerHandle, ChannelNumber, pwmValue);
+        if constexpr (core::BuildConfiguration::isEmbeddedBuild)
+            __HAL_TIM_SET_COMPARE(TimerHandle, ChannelNumber, pwmValue);
     }
 
     void setMaximumPwm() const
     {
-        __HAL_TIM_SET_COMPARE(TimerHandle, ChannelNumber,
-                              std::numeric_limits<TimerResolution>::max());
+        if constexpr (core::BuildConfiguration::isEmbeddedBuild)
+        {
+            __HAL_TIM_SET_COMPARE(TimerHandle, ChannelNumber,
+                                  std::numeric_limits<TimerResolution>::max());
+        }
     }
 
 private:
