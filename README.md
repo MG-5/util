@@ -3,26 +3,26 @@
 ## Gpio class
 *ToDo*
 
-## Led class
+## LED class
 
-#### binary led
+#### binary LED
 A LED can be controlled by simply turning it on or off, without dimming.
 This can be represented by `util::binary_led::SingleLed` with `util::Gpio` as parameter:
 
 ```cpp
-#include "util/Led.hpp"
+#include "util/BinaryLed.hpp"
 
 constexpr util::Gpio TestLedGpio(TEST_LED_GPIO_Port, TEST_LED_Pin);
 util::binary_led::SingleLed testLed(TestLedGpio);
 ```
 
-#### pwm led
+#### PWM LED
 
 For a multicolor LED it make more sense to controll each LED by PWM to get a various color mixings.
 For instance a RGB LED can be represented by `util::pwm_led::TripleLed` with three `util::PwmOutput8Bit` (for 8-Bit PWM timer) as parameter:
 
 ```cpp
-#include "util/Led.hpp"
+#include "util/PwmLed.hpp"
 
 constexpr auto TimerHandle = &htim1;
 
@@ -31,7 +31,6 @@ constexpr util::PwmOutput8Bit GreenChannel(TimerHandle, TIM_CHANNEL_2);
 constexpr util::PwmOutput8Bit BlueChannel(TimerHandle, TIM_CHANNEL_3);
 
 util::pwm_led::TripleLed rgbLed(RedChannel, GreenChannel, BlueChannel);
-
 ```
 
 ### How to use
@@ -59,7 +58,6 @@ extern "C" void taskFunction(void *)
         vTaskDelayUntil(&lastWakeTime, toOsTicks(TaskFrequency));
     }
 }
-
 ```
 
 ## PwmOutput class
