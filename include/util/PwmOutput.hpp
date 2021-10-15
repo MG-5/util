@@ -3,6 +3,8 @@
 
 #include <limits>
 
+namespace util
+{
 template <typename TimerResolution>
 class PwmOutput
 {
@@ -33,3 +35,4 @@ private:
 
 using PwmOutput8Bit = PwmOutput<uint8_t>;
 using PwmOutput16Bit = PwmOutput<uint16_t>;
+} // namespace util
