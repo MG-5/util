@@ -1,5 +1,5 @@
 #pragma once
-#include "tim.h"
+#include <hal_header.h>
 
 #include <limits>
 
