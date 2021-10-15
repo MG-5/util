@@ -7,21 +7,29 @@ template <typename TimerResolution>
 class PwmOutput
 {
 public:
-    PwmOutput(TIM_HandleTypeDef *timerHandle, uint8_t channelNumber)
-        : timerHandle(timerHandle), channelNumber(channelNumber){};
+    constexpr PwmOutput(TIM_HandleTypeDef *const timerHandle, const uint8_t channelNumber)
+        : TimerHandle(timerHandle), ChannelNumber(channelNumber){};
 
-    void setPwmValue(TimerResolution pwmValue)
+    void startPwmTimer() const
     {
-        __HAL_TIM_SET_COMPARE(timerHandle, channelNumber, pwmValue);
+        HAL_TIM_PWM_Start(TimerHandle, ChannelNumber);
     }
 
-    void setMaximumPwm()
+    void setPwmValue(TimerResolution pwmValue) const
     {
-        __HAL_TIM_SET_COMPARE(timerHandle, channelNumber,
+        __HAL_TIM_SET_COMPARE(TimerHandle, ChannelNumber, pwmValue);
+    }
+
+    void setMaximumPwm() const
+    {
+        __HAL_TIM_SET_COMPARE(TimerHandle, ChannelNumber,
                               std::numeric_limits<TimerResolution>::max());
     }
 
 private:
-    TIM_HandleTypeDef *timerHandle;
-    uint32_t channelNumber;
+    TIM_HandleTypeDef *const TimerHandle;
+    const uint32_t ChannelNumber;
 };
+
+using PwmOutput8Bit = PwmOutput<uint8_t>;
+using PwmOutput16Bit = PwmOutput<uint16_t>;

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "helpers/freertos.hpp"
 #include "util/PwmOutput.hpp"
 #include "util/gpio.hpp"
 
@@ -24,16 +25,42 @@ public:
         turnOffInherited();
     }
 
-    void setBlinking(units::si::Frequency blinkFrequency)
+    void setBlinking(units::si::Frequency frequency)
     {
         ledState = LedState::Blinking;
-        this->blinkFrequency = blinkFrequency;
+        this->blinkFrequency = frequency;
     }
 
     void setFlashing()
     {
         ledState = LedState::Flashing;
-        this->blinkFrequency = blinkFrequency;
+    }
+
+    void updateState(uint32_t currentTicks)
+    {
+        switch (ledState)
+        {
+        case LedState::Blinking:
+        {
+            bool state = pdMS_TO_TICKS(currentTicks) % toOsTicks(blinkFrequency) /
+                         toOsTicks(blinkFrequency) / 2;
+
+            state ? turnOnInherited() : turnOffInherited();
+        }
+        break;
+
+        case LedState::Flashing:
+        {
+            auto state = pdMS_TO_TICKS(currentTicks) % pdMS_TO_TICKS(1000) / pdMS_TO_TICKS(100);
+
+            (state == 0 || state == 2) ? turnOnInherited() : turnOffInherited();
+        }
+        break;
+
+        case LedState::Normal:
+        default:
+            break;
+        }
     }
 
 protected:
@@ -71,7 +98,7 @@ protected:
     bool isOn = false;
 };
 
-namespace binary
+namespace binary_led
 {
 class SingleLed : public LedBase
 {
@@ -131,9 +158,9 @@ private:
     Gpio ledGreenGpio;
     DualLedColor color = DualLedColor::Red;
 };
-} // namespace binary
+} // namespace binary_led
 
-namespace pwm
+namespace pwm_led
 {
 template <typename TimerResolution>
 class SingleLed : public LedBase
@@ -147,7 +174,7 @@ public:
         pwmOutput.setMaximumPwm();
     }
 
-    void turnOff() override
+    void turnOffInherited() override
     {
         pwmOutput.setPwmValue(0);
     }
@@ -172,7 +199,7 @@ public:
             PwmOutput<TimerResolution> ledGreenPwmOutput)
         : ledRedPwmOutput{ledRedPwmOutput}, ledGreenPwmOutput{ledGreenPwmOutput} {};
 
-    void setColor(DualLedColor ledColor) override
+    void setColor(DualLedColor ledColor)
     {
         this->color = ledColor;
         update();
@@ -238,6 +265,12 @@ template <typename TimerResolution>
 class TripleLed : public MultiColorLedBase
 {
 public:
+    TripleLed(PwmOutput<TimerResolution> ledRedPwmOutput,
+              PwmOutput<TimerResolution> ledGreenPwmOutput,
+              PwmOutput<TimerResolution> ledBluePwmOutput)
+        : ledRedPwmOutput{ledRedPwmOutput}, ledGreenPwmOutput{ledGreenPwmOutput},
+          ledBluePwmOutput{ledBluePwmOutput} {};
+
     void setColor(TripleLedColor ledColor)
     {
         this->color = ledColor;
@@ -284,13 +317,13 @@ private:
             case TripleLedColor::Turquoise:
                 ledRedPwmOutput.setPwmValue(0);
                 ledGreenPwmOutput.setMaximumPwm();
-                ledBluePwmOutput.setMaximumPwm(std::numeric_limits<TimerResolution>::max() / 2);
+                ledBluePwmOutput.setPwmValue(std::numeric_limits<TimerResolution>::max() / 2);
                 break;
 
             case TripleLedColor::Purple:
                 ledRedPwmOutput.setPwmValue(std::numeric_limits<TimerResolution>::max());
                 ledGreenPwmOutput.setPwmValue(0);
-                ledBluePwmOutput.setMaximumPwm(std::numeric_limits<TimerResolution>::max() / 2);
+                ledBluePwmOutput.setPwmValue(std::numeric_limits<TimerResolution>::max() / 2);
                 break;
 
             default:
@@ -315,6 +348,6 @@ private:
     PwmOutput<TimerResolution> ledBluePwmOutput;
 };
 
-} // namespace pwm
+} // namespace pwm_led
 
 } // namespace util
