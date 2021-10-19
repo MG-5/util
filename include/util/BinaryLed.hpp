@@ -29,7 +29,7 @@ enum class DualLedColor
 //--------------------------------------------------------------------------------------------------
 
 /// only for red and green LEDs in bundle
-class DualLed : public MultiColorLedBase
+class DualLed : public MultiColorLedBase<DualLedColor>
 {
 public:
     DualLed(Gpio ledRedGpio, Gpio ledGreenGpio)
