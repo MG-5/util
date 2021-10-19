@@ -40,25 +40,19 @@ enum class DualLedColor
 
 //--------------------------------------------------------------------------------------------------
 template <typename TimerResolution>
-class DualLed : public MultiColorLedBase
+class DualLed : public MultiColorLedBase<DualLedColor>
 {
 public:
     DualLed(PwmOutput<TimerResolution> ledRedPwmOutput,
             PwmOutput<TimerResolution> ledGreenPwmOutput)
         : ledRedPwmOutput{ledRedPwmOutput}, ledGreenPwmOutput{ledGreenPwmOutput} {};
 
-    void setColor(DualLedColor ledColor)
-    {
-        this->color = ledColor;
-        update();
-    }
-
 private:
     void update() override
     {
-        if (MultiColorLedBase::isOn)
+        if (isOn)
         {
-            switch (color)
+            switch (currentColor)
             {
             case DualLedColor::Red:
                 ledRedPwmOutput.setMaximumPwm();
@@ -67,12 +61,12 @@ private:
 
             case DualLedColor::Yellow:
                 ledRedPwmOutput.setMaximumPwm();
-                ledGreenPwmOutput.setMaximumPwm();
+                ledGreenPwmOutput.setPwmValue(std::numeric_limits<TimerResolution>::max() / 3);
                 break;
 
             case DualLedColor::Orange:
                 ledRedPwmOutput.setMaximumPwm();
-                ledGreenPwmOutput.setPwmValue(std::numeric_limits<TimerResolution>::max() / 2);
+                ledGreenPwmOutput.setPwmValue(std::numeric_limits<TimerResolution>::max() / 8);
                 break;
 
             case DualLedColor::Green:
@@ -95,7 +89,6 @@ private:
 
     PwmOutput<TimerResolution> ledRedPwmOutput;
     PwmOutput<TimerResolution> ledGreenPwmOutput;
-    DualLedColor color = DualLedColor::Red;
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -112,7 +105,7 @@ enum class TripleLedColor
 
 //--------------------------------------------------------------------------------------------------
 template <typename TimerResolution>
-class TripleLed : public MultiColorLedBase
+class TripleLed : public MultiColorLedBase<TripleLedColor>
 {
 public:
     TripleLed(PwmOutput<TimerResolution> ledRedPwmOutput,
@@ -121,18 +114,12 @@ public:
         : ledRedPwmOutput{ledRedPwmOutput}, ledGreenPwmOutput{ledGreenPwmOutput},
           ledBluePwmOutput{ledBluePwmOutput} {};
 
-    void setColor(TripleLedColor ledColor)
-    {
-        this->color = ledColor;
-        update();
-    }
-
 private:
     void update() override
     {
-        if (MultiColorLedBase::isOn)
+        if (isOn)
         {
-            switch (color)
+            switch (currentColor)
             {
             case TripleLedColor::Red:
                 ledRedPwmOutput.setMaximumPwm();
@@ -142,13 +129,13 @@ private:
 
             case TripleLedColor::Yellow:
                 ledRedPwmOutput.setMaximumPwm();
-                ledGreenPwmOutput.setMaximumPwm();
+                ledGreenPwmOutput.setPwmValue(std::numeric_limits<TimerResolution>::max() / 3);
                 ledBluePwmOutput.setPwmValue(0);
                 break;
 
             case TripleLedColor::Orange:
                 ledRedPwmOutput.setMaximumPwm();
-                ledGreenPwmOutput.setPwmValue(std::numeric_limits<TimerResolution>::max() / 2);
+                ledGreenPwmOutput.setPwmValue(std::numeric_limits<TimerResolution>::max() / 8);
                 ledBluePwmOutput.setPwmValue(0);
                 break;
 
@@ -190,8 +177,6 @@ private:
             ledBluePwmOutput.setPwmValue(0);
         }
     }
-
-    TripleLedColor color = TripleLedColor::Red;
 
     PwmOutput<TimerResolution> ledRedPwmOutput;
     PwmOutput<TimerResolution> ledGreenPwmOutput;

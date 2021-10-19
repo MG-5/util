@@ -9,18 +9,18 @@ class LedBase
 public:
     virtual ~LedBase() = default;
 
-    /// Turns on LED, will call the inherited turn on process of derived class.
-    virtual void turnOn() final
+    /// Turns on LED and resets it's blinking/flash state.
+    void turnOn()
     {
         ledState = LedState::Normal;
-        turnOnInherited();
+        isOn = true;
     }
 
-    /// Turns off LED, will call the inherited turn off process of derived class.
-    virtual void turnOff() final
+    /// Turns off LED and resets it's blinking/flash state.
+    void turnOff()
     {
         ledState = LedState::Normal;
-        turnOffInherited();
+        isOn = false;
     }
 
     /// Enables blinking at given frequency.
@@ -49,18 +49,14 @@ public:
         {
         case LedState::Blinking:
         {
-            bool state = pdMS_TO_TICKS(currentTicks) % toOsTicks(blinkFrequency) /
-                         toOsTicks(blinkFrequency) / 2;
-
-            state ? turnOnInherited() : turnOffInherited();
+            isOn = currentTicks % toOsTicks(blinkFrequency) / (toOsTicks(blinkFrequency) / 2);
         }
         break;
 
         case LedState::Flashing:
         {
             auto state = pdMS_TO_TICKS(currentTicks) % pdMS_TO_TICKS(1000) / pdMS_TO_TICKS(100);
-
-            (state == 0 || state == 2) ? turnOnInherited() : turnOffInherited();
+            isOn = (state == 0 || state == 2);
         }
         break;
 
@@ -68,15 +64,11 @@ public:
         default:
             break;
         }
+
+        update();
     }
 
 protected:
-    /// Each derived class should implement the turn on process if needed
-    virtual void turnOnInherited() = 0;
-
-    /// Each derived class should implement the turn off process if needed
-    virtual void turnOffInherited() = 0;
-
     enum class LedState
     {
         Normal,
@@ -86,27 +78,42 @@ protected:
 
     LedState ledState = LedState::Normal;
     units::si::Frequency blinkFrequency = 1.0_Hz;
+
+    /// Each derived class should implement the on/off process
+    virtual void update() = 0;
+
+    /// Normally used by inherited update functions to get the on/off state of LED object
+    bool isOn = false;
 };
 
 //--------------------------------------------------------------------------------------------------
+template <typename LedColor>
 class MultiColorLedBase : public LedBase
 {
 public:
-    void turnOnInherited() override
+    /// Set the color of LED without changing its state (on/off etc).
+    /// To change the state of any LED object, use the turnOn()/turnOff() functions.
+    /// \param ledColor  color at which LED should lights up, if turned on
+    /// \param frequency Blink frequency - 50% of period time will be on/off
+    void setColor(LedColor ledColor)
     {
-        isOn = true;
-        update();
+        currentColor = ledColor;
     }
 
-    void turnOffInherited() override
+    /// Enables blinking with given color at given frequency.
+    /// To turn off blinking simply use turnOn()/turnOff() functions.
+    /// \param ledColor  color at which LED should blink
+    /// \param frequency Blink frequency - 50% of period time will be on/off
+    void setColorBlinking(LedColor ledColor, units::si::Frequency frequency)
     {
-        isOn = false;
-        update();
+        currentColor = ledColor;
+        setBlinking(frequency);
     }
 
 protected:
-    virtual void update() = 0;
-    bool isOn = false;
+    /// Each derived class should implement it own enum class for colors and pass them as template
+    /// parameter.
+    LedColor currentColor{};
 };
 
 } // namespace util

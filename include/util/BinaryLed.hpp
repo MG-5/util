@@ -10,17 +10,12 @@ class SingleLed : public LedBase
 public:
     explicit SingleLed(Gpio gpio) : ledGpio{gpio} {};
 
-    void turnOnInherited() override
-    {
-        ledGpio.write(Gpio::High);
-    }
-
-    void turnOffInherited() override
-    {
-        ledGpio.write(Gpio::Low);
-    }
-
 private:
+    void update()
+    {
+        ledGpio.write(isOn);
+    }
+
     Gpio ledGpio;
 };
 
@@ -43,7 +38,6 @@ public:
     void setColor(DualLedColor ledColor)
     {
         this->color = ledColor;
-        update();
     }
 
 private:
