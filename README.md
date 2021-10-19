@@ -35,7 +35,18 @@ util::pwm_led::TripleLed rgbLed(RedChannel, GreenChannel, BlueChannel);
 
 ### How to use
 You can apply modes like blinking, flashing, on/off state to your object and for multicolor LED you can change its color mix of course.
-To make sure that blinking/flashing works properly, the `updateState()` function for each LED object must be called periodically.
+
+For single color LEDs (regardless of binary of PWM types), we have following functions:
+- `turnOn()`
+- `turnOff()`
+- `setBlinking(units::si::Freqency frequency)`
+- `setFlashing()`
+
+For multicolor LEDs, we have those additional functions:
+- `setColor(LEDColor ledColor)`
+- `setColorBlinking(LEDColor ledColor,units::si::Freqency frequency)`
+
+**Make sure** that blinking/flashing works properly, the `updateState()` function for each LED object must be called periodically.
 
 ```cpp
 constexpr auto TaskFrequency = 20.0_Hz;
