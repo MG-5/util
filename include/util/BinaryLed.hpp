@@ -35,11 +35,6 @@ public:
     DualLed(Gpio ledRedGpio, Gpio ledGreenGpio)
         : ledRedGpio{ledRedGpio}, ledGreenGpio{ledGreenGpio} {};
 
-    void setColor(DualLedColor ledColor)
-    {
-        this->color = ledColor;
-    }
-
 private:
     void update() override
     {
