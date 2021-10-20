@@ -49,7 +49,7 @@ For multicolor LEDs, we have those additional functions:
 **Make sure** that blinking/flashing works properly, the `updateState()` function for each LED object must be called periodically.
 
 ```cpp
-constexpr auto TaskFrequency = 20.0_Hz;
+constexpr auto TaskFrequency = 50.0_Hz;
 
 extern "C" void taskFunction(void *)
 {
@@ -58,7 +58,6 @@ extern "C" void taskFunction(void *)
 
     // set LED color to Orange and turn that on
     rgbLed.setColor(util::pwm_led::TripleLedColor::Orange);
-    rgbLed.turnOn();
 
     auto lastWakeTime = xTaskGetTickCount();
     while(true)
