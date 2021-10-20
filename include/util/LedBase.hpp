@@ -91,13 +91,14 @@ template <typename LedColor>
 class MultiColorLedBase : public LedBase
 {
 public:
-    /// Set the color of LED without changing its state (on/off etc).
-    /// To change the state of any LED object, use the turnOn()/turnOff() functions.
+    /// Set the color of LED and turning it on automatically.
+    /// States like blinking/flashing will be not changed. 
     /// \param ledColor  color at which LED should lights up, if turned on
     /// \param frequency Blink frequency - 50% of period time will be on/off
     void setColor(LedColor ledColor)
     {
         currentColor = ledColor;
+        isOn = true;
     }
 
     /// Enables blinking with given color at given frequency.
