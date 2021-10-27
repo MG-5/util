@@ -92,11 +92,11 @@ class MultiColorLedBase : public LedBase
 {
 public:
     /// Set the color of LED and turning it on automatically.
-    /// States like blinking/flashing will be not changed. 
-    /// \param ledColor  color at which LED should lights up, if turned on
-    /// \param frequency Blink frequency - 50% of period time will be on/off
+    /// States like blinking/flashing will be resetted.
+    /// \param ledColor  color at which LED should lights up
     void setColor(LedColor ledColor)
     {
+        ledState = LedState::Normal;
         currentColor = ledColor;
         isOn = true;
     }
@@ -109,6 +109,15 @@ public:
     {
         currentColor = ledColor;
         setBlinking(frequency);
+    }
+
+    /// Enables flashing with given color.
+    /// To turn off flashing simply use turnOn()/turnOff() functions.
+    /// \param ledColor  color at which LED should flashing
+    void setColorFlashing(LedColor ledColor)
+    {
+        currentColor = ledColor;
+        setFlashing();
     }
 
 protected:
