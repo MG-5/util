@@ -38,10 +38,10 @@ public:
 private:
     void update() override
     {
-        if (MultiColorLedBase::isOn)
+        if (isOn)
         {
-            ledRedGpio.write((color == DualLedColor::Red || color == DualLedColor::Yellow));
-            ledGreenGpio.write((color == DualLedColor::Green || color == DualLedColor::Yellow));
+            ledRedGpio.write((currentColor == DualLedColor::Red || currentColor == DualLedColor::Yellow));
+            ledGreenGpio.write((currentColor == DualLedColor::Green || currentColor == DualLedColor::Yellow));
         }
         else
         {
@@ -52,6 +52,5 @@ private:
 
     Gpio ledRedGpio;
     Gpio ledGreenGpio;
-    DualLedColor color = DualLedColor::Red;
 };
 } // namespace util::binary_led
