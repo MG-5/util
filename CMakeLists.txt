@@ -7,7 +7,10 @@ add_library(${PROJECT_NAME} STATIC
         src/Button.cxx
         src/RecursiveMutex.cpp
         src/Mutex.cpp
-        src/ScopedLock.cpp)
+        src/ScopedLock.cpp
+        src/Task.cpp
+        src/BinarySemaphore.cpp
+        )
 
 target_include_directories(${PROJECT_NAME} PUBLIC
         include
