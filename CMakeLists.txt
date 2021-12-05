@@ -10,6 +10,7 @@ add_library(${PROJECT_NAME} STATIC
         src/ScopedLock.cpp
         src/Task.cpp
         src/BinarySemaphore.cpp
+        src/IndependentWatchdog.cpp
         )
 
 target_include_directories(${PROJECT_NAME} PUBLIC
