@@ -43,9 +43,9 @@ template <typename TimerResolution>
 class DualLed : public MultiColorLedBase<DualLedColor>
 {
 public:
-    DualLed(PwmOutput<TimerResolution> ledRedPwmOutput,
-            PwmOutput<TimerResolution> ledGreenPwmOutput)
-        : ledRedPwmOutput{ledRedPwmOutput}, ledGreenPwmOutput{ledGreenPwmOutput} {};
+    DualLed(PwmOutput<TimerResolution>& ledRedPwmOutput,
+            PwmOutput<TimerResolution>& ledGreenPwmOutput)
+        : ledRedPwmOutput(ledRedPwmOutput), ledGreenPwmOutput(ledGreenPwmOutput) {};
 
 private:
     void update() override
@@ -87,8 +87,8 @@ private:
         }
     }
 
-    PwmOutput<TimerResolution> ledRedPwmOutput;
-    PwmOutput<TimerResolution> ledGreenPwmOutput;
+    PwmOutput<TimerResolution>& ledRedPwmOutput;
+    PwmOutput<TimerResolution>& ledGreenPwmOutput;
 };
 
 //--------------------------------------------------------------------------------------------------
