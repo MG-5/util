@@ -1,6 +1,7 @@
 #pragma once
 #include <chip.h>
 
+#ifdef HAL_IWDG_MODULE_ENABLED
 namespace util
 {
 class IndependentWatchdog
@@ -13,3 +14,4 @@ private:
     IWDG_HandleTypeDef &iwdg;
 };
 } // namespace util
+#endif
