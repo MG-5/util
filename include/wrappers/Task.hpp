@@ -81,9 +81,9 @@ public:
     using cpp_thread_task_func_t = void (Invoker::*)(void *);
     using FunctionTuple = std::tuple<Invoker &, cpp_thread_task_func_t>;
 
-    TaskWithMemberFunction(FunctionTuple functionTuple, const char *name, uint16_t stackDepth,
+    TaskWithMemberFunction(FunctionTuple &functionTuple, const char *name, uint16_t stackDepth,
                            UBaseType_t priority)
-        : Task(proxy<Invoker>, name, stackDepth, (void *)&functionTuple, priority)
+        : Task(proxy<Invoker>, name, stackDepth, reinterpret_cast<void *>(&functionTuple), priority)
     {
     }
 };
