@@ -34,7 +34,7 @@ public:
     void notifyGive();
     void notifyTake(TickType_t waittime);
 
-    static constexpr uint8_t MaxTasks = 6;
+    static constexpr uint8_t MaxTasks = 16;
     static std::array<TaskHandle_t, MaxTasks> &getAllTaskHandles()
     {
         return taskList;
