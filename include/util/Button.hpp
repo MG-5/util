@@ -3,6 +3,8 @@
 #include "gpio.hpp"
 #include <units/si/time.hpp>
 
+#include <functional>
+
 namespace util
 {
 class Button
@@ -21,7 +23,7 @@ public:
         StopLongPress
     };
 
-    using Callback = void (*)(Action action);
+    using Callback = std::function<void(Action action)>;
 
 private:
     enum class InternalState
@@ -32,7 +34,7 @@ private:
     };
 
 public:
-    constexpr Button(util::Gpio buttonGpio, Callback callback, const units::si::Time longPressTime)
+    Button(util::Gpio buttonGpio, Callback callback, const units::si::Time longPressTime)
         : buttonGpio{buttonGpio}, ButtonCallback{callback}, LongPressTime{longPressTime}
     {
     }
