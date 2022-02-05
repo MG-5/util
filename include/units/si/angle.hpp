@@ -15,7 +15,7 @@ constexpr auto DegreesFactor = M_PIf32 / 180.0f;
 
 namespace units::si::scale
 {
-constexpr auto deg = Scale<Angle::Unit>{DegreesFactor};
+constexpr auto deg = Scale<Angle::Unit>{1.0f / DegreesFactor};
 } // namespace units::si::scale
 
 constexpr units::si::Angle operator"" _rad(const long double magnitude)
