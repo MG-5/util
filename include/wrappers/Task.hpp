@@ -88,4 +88,19 @@ public:
     }
 };
 
+class TaskWithMemberFunctionBase : public Task
+{
+public:
+    TaskWithMemberFunctionBase(const char *name, uint16_t stackDepth, UBaseType_t priority)
+        : Task(&runTaskStub, name, stackDepth, nullptr, priority)
+    {
+    }
+
+    virtual void taskMain(void *parameters) = 0;
+    static void runTaskStub(void *parameters)
+    {
+        (static_cast<TaskWithMemberFunctionBase *>(parameters))->taskMain(parameters);
+    }
+};
+
 } // namespace util::wrappers
