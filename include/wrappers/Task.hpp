@@ -1,4 +1,5 @@
 #pragma once
+#include "cmsis_os2.h"
 #include <FreeRTOS.h>
 #include <array>
 #include <event_groups.h>
@@ -56,50 +57,18 @@ protected:
     static constexpr EventBits_t AllTasksWaitFlag = 1 << 0;
 };
 
-/**
- * @brief Proxy function to invoke C++ functions out of a FreeRtos C context
- * @tparam Invoker Class type of the thread class
- * @param arg tuple with reference to invoker and function pointer
- * @return
- */
-template <class Invoker>
-void proxy(void *arg)
-{
-    using cpp_thread_task_func_t = void (Invoker::*)();
-    volatile auto tuple = static_cast<std::tuple<Invoker &, cpp_thread_task_func_t> *>(arg);
-    std::invoke(std::get<1>(*tuple), std::get<0>(*tuple));
-}
-
-/**
- * @brief Helper to start C++ member functions in FreeRtos threads
- * @tparam Invoker the member class type of the function that should be invoked
- */
-template <class Invoker>
-class TaskWithMemberFunction : public Task
-{
-public:
-    using cpp_thread_task_func_t = void (Invoker::*)(void *);
-    using FunctionTuple = std::tuple<Invoker &, cpp_thread_task_func_t>;
-
-    TaskWithMemberFunction(FunctionTuple &functionTuple, const char *name, uint16_t stackDepth,
-                           UBaseType_t priority)
-        : Task(proxy<Invoker>, name, stackDepth, reinterpret_cast<void *>(&functionTuple), priority)
-    {
-    }
-};
-
+/// By inherited from here the child class can start FreeRTOS task in C++ context.
+/// There is the virtual function "taskMain" which should be implemented by the child class.
 class TaskWithMemberFunctionBase : public Task
 {
 public:
     TaskWithMemberFunctionBase(const char *name, uint16_t stackDepth, UBaseType_t priority)
-        : Task(&runTaskStub, name, stackDepth, nullptr, priority)
-    {
-    }
+        : Task(&runTaskStub, name, stackDepth, nullptr, priority){};
 
     virtual void taskMain(void *parameters) = 0;
     static void runTaskStub(void *parameters)
     {
-        (static_cast<TaskWithMemberFunctionBase *>(parameters))->taskMain(parameters);
+        static_cast<TaskWithMemberFunctionBase *>(parameters)->taskMain(parameters);
     }
 };
 
