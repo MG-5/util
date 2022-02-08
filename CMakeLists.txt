@@ -14,7 +14,33 @@ add_library(${PROJECT_NAME} STATIC
         )
 
 target_include_directories(${PROJECT_NAME} PUBLIC
-        include
-        )
+        include)
 
 target_link_libraries(${PROJECT_NAME} freertos core)
+
+
+if (NOT DEFINED isEmbeddedCompiler)
+    message(FATAL_ERROR "Required variable isEmbeddedCompiler is not in scope")
+endif ()
+if (${CMAKE_TESTING_ENABLED})
+    find_package(PkgConfig)
+    pkg_search_module(GTEST REQUIRED gtest)
+    pkg_search_module(GMOCK REQUIRED gmock)
+    set(CMAKE_CXX_STANDARD 17)
+
+    add_executable(${PROJECT_NAME}_test
+            test/src/main.cpp
+            test/src/Angle.cpp)
+
+    target_link_libraries(${PROJECT_NAME}_test PRIVATE
+            ${GTEST_LDFLAGS}
+            ${GMOCK_LDFLAGS}
+            gcov
+            )
+    target_include_directories(${PROJECT_NAME}_test PRIVATE
+            include)
+    target_link_options(${PROJECT_NAME}_test PRIVATE --coverage)
+    target_compile_options(${PROJECT_NAME}_test PRIVATE ${GTEST_CFLAGS} ${GMOCK_CFLAGS} --coverage)
+
+    add_test(${PROJECT_NAME}_test ${PROJECT_NAME}_test)
+endif ()
