@@ -1,7 +1,7 @@
 #pragma once
 
 #include "units/si.hpp"
-#include <cmath>
+#include <numbers>
 
 namespace units::si
 {
@@ -10,7 +10,7 @@ using Angle = Value<SiUnit<0, 0, 0, 0, 0, 0, 0>>;
 
 namespace
 {
-constexpr auto DegreesFactor = M_PIf32 / 180.0f;
+constexpr auto DegreesFactor = std::numbers::pi / 180.0f;
 } // namespace
 
 namespace units::si::scale
