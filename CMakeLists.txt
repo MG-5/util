@@ -18,6 +18,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 
 target_link_libraries(${PROJECT_NAME} freertos core)
 
+target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
 
 if (NOT DEFINED isEmbeddedCompiler)
     message(FATAL_ERROR "Required variable isEmbeddedCompiler is not in scope")
@@ -26,12 +27,11 @@ if (${CMAKE_TESTING_ENABLED})
     find_package(PkgConfig)
     pkg_search_module(GTEST REQUIRED gtest)
     pkg_search_module(GMOCK REQUIRED gmock)
-    set(CMAKE_CXX_STANDARD 17)
 
     add_executable(${PROJECT_NAME}_test
             test/src/main.cpp
             test/src/Angle.cpp)
-
+    target_compile_features(${PROJECT_NAME}_test PUBLIC cxx_std_20)
     target_link_libraries(${PROJECT_NAME}_test PRIVATE
             ${GTEST_LDFLAGS}
             ${GMOCK_LDFLAGS}
