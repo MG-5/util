@@ -30,7 +30,9 @@ if (${CMAKE_TESTING_ENABLED})
 
     add_executable(${PROJECT_NAME}_test
             test/src/main.cpp
-            test/src/Angle.cpp)
+            test/src/Angle.cpp
+            test/src/Abs.cpp
+            )
     target_compile_features(${PROJECT_NAME}_test PUBLIC cxx_std_20)
     target_link_libraries(${PROJECT_NAME}_test PRIVATE
             ${GTEST_LDFLAGS}

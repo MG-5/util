@@ -5,6 +5,7 @@
 #include "units/si_unit.hpp"
 #include <cstdint>
 #include <type_traits>
+#include <cmath>
 
 namespace units
 {
@@ -65,6 +66,15 @@ public:
             this->magnitude = magnitude;
         else
             this->magnitude = static_cast<Type>(magnitude);
+    }
+
+    template <typename Type = float>
+    constexpr Type abs() const noexcept
+    {
+        if constexpr (std::is_same<Type, float>::value)
+            return std::abs(magnitude);
+        else
+            return static_cast<Type>(std::abs(magnitude));
     }
 };
 
