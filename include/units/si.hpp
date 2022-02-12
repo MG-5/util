@@ -3,9 +3,9 @@
 #include "units/offset.hpp"
 #include "units/scale.hpp"
 #include "units/si_unit.hpp"
+#include <cmath>
 #include <cstdint>
 #include <type_traits>
-#include <cmath>
 
 namespace units
 {
@@ -222,4 +222,26 @@ constexpr bool operator!=(const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &lhs,
 {
     return lhs.getMagnitude() != rhs.getMagnitude();
 }
+
+// convenience operators
+template <int M, int Kg, int S, int A, int K, int Mo, int C>
+constexpr Value<SiUnit<M, Kg, S, A, K, Mo, C>> min(const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &lhs,
+                                                   const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &rhs)
+{
+    return Value<SiUnit<M, Kg, S, A, K, Mo, C>>(std::min(lhs.getMagnitude(), rhs.getMagnitude()));
+}
+
+template <int M, int Kg, int S, int A, int K, int Mo, int C>
+constexpr Value<SiUnit<M, Kg, S, A, K, Mo, C>> max(const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &lhs,
+                                                   const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &rhs)
+{
+    return Value<SiUnit<M, Kg, S, A, K, Mo, C>>(std::max(lhs.getMagnitude(), rhs.getMagnitude()));
+}
+
+template <int M, int Kg, int S, int A, int K, int Mo, int C>
+constexpr Value<SiUnit<M, Kg, S, A, K, Mo, C>> abs(const Value<SiUnit<M, Kg, S, A, K, Mo, C>> &lhs)
+{
+    return Value<SiUnit<M, Kg, S, A, K, Mo, C>>(std::abs(lhs.getMagnitude()));
+}
+
 } // namespace units
