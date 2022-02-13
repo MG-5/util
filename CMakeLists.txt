@@ -32,12 +32,14 @@ if (${CMAKE_TESTING_ENABLED})
             test/src/main.cpp
             test/src/Angle.cpp
             test/src/units.cpp
+            test/src/MapValue.cpp
             )
     target_compile_features(${PROJECT_NAME}_test PUBLIC cxx_std_20)
     target_link_libraries(${PROJECT_NAME}_test PRIVATE
             ${GTEST_LDFLAGS}
             ${GMOCK_LDFLAGS}
             gcov
+            core
             )
     target_include_directories(${PROJECT_NAME}_test PRIVATE
             include)
