@@ -26,6 +26,22 @@ public:
     {
     }
 
+    template <typename OffsetSiUnit>
+    constexpr explicit Value(const float magnitude, const Offset<OffsetSiUnit> offset) noexcept :
+          magnitude{magnitude - offset.getOffset()}
+    {
+        static_assert(std::is_same<SiUnit, OffsetSiUnit>::value,
+                      "Offset has incompatible underlying SI unit");
+    }
+
+    template <typename ScaleSiUnit>
+    constexpr explicit Value(const float magnitude, const Scale<ScaleSiUnit> scale) noexcept :
+          magnitude{magnitude / scale.getScalingFactor()}
+    {
+        static_assert(std::is_same<SiUnit, ScaleSiUnit>::value,
+                      "Scale has incompatible underlying SI unit");
+    }
+
     template <typename Type = float>
     constexpr Type getMagnitude() const noexcept
     {
@@ -57,6 +73,30 @@ public:
             return magnitude + offset.getOffset();
         else
             return static_cast<Type>(magnitude + offset.getOffset());
+    }
+
+    template <typename Type = float, typename OffsetSiUnit>
+    constexpr void setMagnitude(Type magnitude, const Offset<OffsetSiUnit> offset) noexcept
+    {
+        static_assert(std::is_same<SiUnit, OffsetSiUnit>::value,
+                       "Offset has incompatible underlying SI unit");
+
+        if constexpr (std::is_same<Type, float>::value)
+            this->magnitude = magnitude - offset.getOffset();
+        else
+            this->magnitude = static_cast<Type>(magnitude - offset.getOffset());
+    }
+
+    template <typename Type = float, typename ScaleSiUnit>
+    constexpr void setMagnitude(Type magnitude, const Scale<ScaleSiUnit> scale) noexcept
+    {
+        static_assert(std::is_same<SiUnit, ScaleSiUnit>::value,
+                      "Scale has incompatible underlying SI unit");
+
+        if constexpr (std::is_same<Type, float>::value)
+            this->magnitude = magnitude / scale.getScalingFactor();
+        else
+            this->magnitude = static_cast<Type>(magnitude * scale.getScalingFactor());
     }
 
     template <typename Type = float>
