@@ -57,18 +57,19 @@ protected:
     static constexpr EventBits_t AllTasksWaitFlag = 1 << 0;
 };
 
-/// By inherited from here the child class can start FreeRTOS task in C++ context.
-/// There is the virtual function "taskMain" which should be implemented by the child class.
+/// Inherit from this class and implement taskMain() to have your class start a FreeRTOS task,
+/// executing code in taskMain(). This is a shorthand for usage of Task which requires you
+/// to manually create a static function and pass the this-pointer via FreeRTOS.
 class TaskWithMemberFunctionBase : public Task
 {
 public:
     TaskWithMemberFunctionBase(const char *name, uint16_t stackDepth, UBaseType_t priority)
         : Task(&runTaskStub, name, stackDepth, this, priority){};
 
-    virtual void taskMain(void *parameters) = 0;
+    virtual void taskMain() = 0;
     static void runTaskStub(void *parameters)
     {
-        static_cast<TaskWithMemberFunctionBase *>(parameters)->taskMain(parameters);
+        static_cast<TaskWithMemberFunctionBase *>(parameters)->taskMain();
     }
 };
 
