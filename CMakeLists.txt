@@ -11,6 +11,7 @@ add_library(${PROJECT_NAME} STATIC
         src/Task.cpp
         src/BinarySemaphore.cpp
         src/IndependentWatchdog.cpp
+        src/StreamBuffer.cpp
         )
 
 target_include_directories(${PROJECT_NAME} PUBLIC
