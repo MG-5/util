@@ -5,6 +5,7 @@
 namespace util::wrappers
 {
 
+using TimeTick = uint32_t;
 class HAL
 {
 public:
@@ -16,10 +17,11 @@ public:
     HAL &operator=(const HAL &) = delete;
     HAL &operator=(HAL &&) = delete;
 
-    virtual uint32_t GetTick() const
+    virtual uint32_t getTick() const
     {
         return HAL_GetTick();
     }
+    static constexpr TimeTick TimeTicksPerSecond = 1000;
 };
 
 } // namespace wrapper
