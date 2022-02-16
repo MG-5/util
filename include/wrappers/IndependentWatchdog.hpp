@@ -1,8 +1,8 @@
 #pragma once
-#include <chip.h>
 
 #ifdef HAL_IWDG_MODULE_ENABLED
-namespace util
+#include <hal_header.h>
+namespace util::wrappers
 {
 class IndependentWatchdog
 {
