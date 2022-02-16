@@ -32,6 +32,15 @@ public:
         HAL_GPIO_TogglePin(port, pin);
     }
 
+    [[nodiscard]] GPIO_TypeDef * getPort() const
+    {
+        return port;
+    }
+    [[nodiscard]] uint16_t getPin() const
+    {
+        return pin;
+    }
+
 private:
     GPIO_TypeDef *const port;
     const uint16_t pin;
