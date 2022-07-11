@@ -1,4 +1,5 @@
 #include "wrappers/EventGroup.hpp"
+#include <utility>
 
 namespace util::wrappers
 {
@@ -8,7 +9,10 @@ EventGroup::EventGroup() : handle(xEventGroupCreate())
 }
 EventGroup::~EventGroup()
 {
-    vEventGroupDelete(handle);
+    if (handle != nullptr)
+    {
+        vEventGroupDelete(handle);
+    }
 }
 EventBits_t EventGroup::clearBits(const EventBits_t uxBitsToClear)
 {
@@ -43,6 +47,15 @@ EventBits_t EventGroup::waitBits(const EventBits_t bitsToWaitFor, const bool cle
 {
     return xEventGroupWaitBits(handle, bitsToWaitFor, clearOnExit ? pdTRUE : pdFALSE,
                                waitForAll ? pdTRUE : pdFALSE, waitTime);
+}
+EventGroup::EventGroup(EventGroup &&other) noexcept
+{
+        (*this) = std::forward<EventGroup>(other);
+}
+EventGroup &EventGroup::operator=(EventGroup &&other) noexcept
+{
+    handle = std::exchange(other.handle, nullptr);
+    return *this;
 }
 
 } // namespace util::wrappers

@@ -11,6 +11,11 @@ public:
     EventGroup();
     ~EventGroup();
 
+    EventGroup(const EventGroup & other) = delete;
+    EventGroup(EventGroup && other) noexcept;
+    EventGroup &operator=(const EventGroup & other) = delete;
+    EventGroup &operator= (EventGroup && other) noexcept;
+
     EventBits_t clearBits(EventBits_t uxBitsToClear);
     bool clearBitsFromISR(EventBits_t uxBitsToClear);
 
@@ -25,7 +30,7 @@ public:
     EventBits_t waitBits(EventBits_t bitsToWaitFor, bool clearOnExit, bool waitForAll,
                          TickType_t waitTime);
 private:
-    EventGroupHandle_t handle;
+    EventGroupHandle_t handle{nullptr};
 };
 
 } // namespace util::wrappers
