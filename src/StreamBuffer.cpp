@@ -12,7 +12,10 @@ StreamBuffer::StreamBuffer(size_t BufferSize, size_t TriggerLevel)
 
 StreamBuffer::~StreamBuffer()
 {
-    vStreamBufferDelete(stream);
+    if (stream != nullptr)
+    {
+        vStreamBufferDelete(stream);
+    }
 }
 bool StreamBuffer::isEmpty()
 {
