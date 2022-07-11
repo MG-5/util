@@ -27,6 +27,7 @@ public:
     size_t sendFromISR(std::span<uint8_t> buffer, BaseType_t *pxHigherPriorityTaskWoken);
     bool setTriggerLevel(size_t);
     size_t getSpaceAvailable();
+    size_t getBytesAvailable();
 
 private:
     StreamBufferHandle_t stream{nullptr};
