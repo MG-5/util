@@ -12,6 +12,7 @@ add_library(${PROJECT_NAME} STATIC
         src/BinarySemaphore.cpp
         src/IndependentWatchdog.cpp
         src/StreamBuffer.cpp
+        src/EventGroup.cpp
         )
 
 target_include_directories(${PROJECT_NAME} PUBLIC
