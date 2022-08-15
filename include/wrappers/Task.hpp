@@ -1,6 +1,9 @@
 #pragma once
+
 #include "IFreeRTOSTask.hpp"
 #include "ITaskWithMemberFunction.hpp"
+#include "priorities.hpp"
+
 #include <FreeRTOS.h>
 #include <array>
 #include <event_groups.h>
@@ -24,9 +27,9 @@ public:
     ~Task() override;
 
     Task(const Task &) = delete;
-    Task(Task && other) noexcept;
+    Task(Task &&other) noexcept;
     Task &operator=(const Task &) = delete;
-    Task &operator=(Task && other) noexcept;
+    Task &operator=(Task &&other) noexcept;
 
     static constexpr uint32_t ClearAllBits = std::numeric_limits<uint32_t>::max();
     int32_t notifyWait(uint32_t ulBitsToClearOnEntry, uint32_t ulBitsToClearOnExit,
@@ -50,9 +53,9 @@ public:
     static void applicationIsReadyStartAllTasks();
 
 protected:
-    TaskHandle_t _handle{nullptr};
-    TaskFunction_t _taskCode{nullptr};
-    void *_parameter{nullptr};
+    TaskHandle_t taskHandle{nullptr};
+    TaskFunction_t taskCode{nullptr};
+    void *taskParameter{nullptr};
 
     [[noreturn]] static void taskMain(void *);
 

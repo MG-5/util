@@ -1,7 +1,7 @@
 #pragma once
+#include "wrappers/IMutex.hpp"
 #include <FreeRTOS.h>
 #include <semphr.h>
-#include "wrappers/IMutex.hpp"
 
 namespace util::wrappers
 {
@@ -22,7 +22,8 @@ public:
     virtual void lock() override;
     virtual bool lockWithTimeout(TickType_t timeToWait) override;
     virtual void unlock() override;
+
 private:
-    SemaphoreHandle_t m_mutex{nullptr};
+    SemaphoreHandle_t mutexHandle{nullptr};
 };
-}
+} // namespace util::wrappers

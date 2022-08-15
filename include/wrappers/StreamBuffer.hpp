@@ -30,6 +30,6 @@ public:
     size_t getBytesAvailable();
 
 private:
-    StreamBufferHandle_t stream{nullptr};
+    StreamBufferHandle_t streamHandle{nullptr};
 };
 } // namespace util::wrappers
