@@ -34,8 +34,12 @@ private:
     };
 
 public:
-    Button(util::Gpio &buttonGpio, Callback callback, const units::si::Time longPressTime)
-        : buttonGpio{buttonGpio}, ButtonCallback{callback}, LongPressTime{longPressTime}
+    explicit Button(util::Gpio &buttonGpio, Callback callback, bool invert = false,
+                    const units::si::Time longPressTime = 500.0_ms)
+        : buttonGpio{buttonGpio},   //
+          ButtonCallback{callback}, //
+          InvertedInput{invert},    //
+          LongPressTime{longPressTime}
     {
     }
 
@@ -51,6 +55,7 @@ private:
 
     util::Gpio &buttonGpio;
     const Callback ButtonCallback;
+    const bool InvertedInput; //! true means that pulled up pin levels will be detected as pressed
     const units::si::Time LongPressTime;
     InternalState internalState = InternalState::Idle;
     units::si::Time pressTimer = TimerReloadValue;

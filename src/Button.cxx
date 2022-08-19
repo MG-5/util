@@ -4,7 +4,8 @@ namespace util
 {
 void Button::update(const units::si::Time timePassed)
 {
-    State state = buttonGpio.read() ? State::NotPressed : State::Pressed;
+    // logical XORing pin state with inverted state
+    State state = (buttonGpio.read() != InvertedInput) ? State::NotPressed : State::Pressed;
 
     switch (internalState)
     {
