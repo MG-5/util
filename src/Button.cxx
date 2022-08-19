@@ -59,4 +59,9 @@ units::si::Time Button::getPassedTime() const
 {
     return pressTimer;
 }
+
+bool Button::isPressing() const
+{
+    return (internalState == InternalState::LongPress);
+}
 } // namespace util

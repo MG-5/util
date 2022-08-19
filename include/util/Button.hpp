@@ -44,6 +44,7 @@ public:
     }
 
     void update(units::si::Time timePassed);
+    bool isPressing() const;
 
 private:
     void loadTimer();
