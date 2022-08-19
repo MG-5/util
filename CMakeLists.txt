@@ -31,11 +31,17 @@ if (${CMAKE_TESTING_ENABLED})
     pkg_search_module(GMOCK REQUIRED gmock)
 
     add_executable(${PROJECT_NAME}_test
+            src/Button.cxx
+            test/src/Button.cxx
+
             test/src/main.cpp
             test/src/Angle.cpp
             test/src/units.cpp
             test/src/MapValue.cpp
+
+            test/src/stub/hal.cxx
             )
+        
     target_compile_features(${PROJECT_NAME}_test PUBLIC cxx_std_20)
     target_link_libraries(${PROJECT_NAME}_test PRIVATE
             ${GTEST_LDFLAGS}
@@ -44,7 +50,10 @@ if (${CMAKE_TESTING_ENABLED})
             core
             )
     target_include_directories(${PROJECT_NAME}_test PRIVATE
-            include)
+            include
+            test/include/mock
+            )
+
     target_link_options(${PROJECT_NAME}_test PRIVATE --coverage)
     target_compile_options(${PROJECT_NAME}_test PRIVATE ${GTEST_CFLAGS} ${GMOCK_CFLAGS} --coverage)
 

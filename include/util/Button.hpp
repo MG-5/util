@@ -34,7 +34,7 @@ private:
     };
 
 public:
-    Button(util::Gpio buttonGpio, Callback callback, const units::si::Time longPressTime)
+    Button(util::Gpio &buttonGpio, Callback callback, const units::si::Time longPressTime)
         : buttonGpio{buttonGpio}, ButtonCallback{callback}, LongPressTime{longPressTime}
     {
     }
@@ -49,7 +49,7 @@ private:
     static constexpr units::si::Time TimerReloadValue = 0.0_s;
     static constexpr units::si::Time DebounceTime = 50.0_ms;
 
-    util::Gpio buttonGpio;
+    util::Gpio &buttonGpio;
     const Callback ButtonCallback;
     const units::si::Time LongPressTime;
     InternalState internalState = InternalState::Idle;
