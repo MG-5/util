@@ -1,10 +1,14 @@
 #include "wrappers/IndependentWatchdog.hpp"
+
 #ifdef HAL_IWDG_MODULE_ENABLED
-util::IndependentWatchdog::IndependentWatchdog(IWDG_HandleTypeDef &iwdt) : iwdg(iwdt)
+namespace util::wrappers
+{
+IndependentWatchdog::IndependentWatchdog(IWDG_HandleTypeDef &iwdt) : iwdg(iwdt)
 {
 }
-void util::IndependentWatchdog::refresh()
+void IndependentWatchdog::refresh()
 {
     HAL_IWDG_Refresh(&iwdg);
 }
+} // namespace util::wrappers
 #endif

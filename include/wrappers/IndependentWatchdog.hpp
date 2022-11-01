@@ -1,7 +1,8 @@
 #pragma once
 
-#ifdef HAL_IWDG_MODULE_ENABLED
 #include <hal_header.h>
+
+#ifdef HAL_IWDG_MODULE_ENABLED
 namespace util::wrappers
 {
 class IndependentWatchdog
@@ -13,5 +14,5 @@ public:
 private:
     IWDG_HandleTypeDef &iwdg;
 };
-} // namespace util
+} // namespace util::wrappers
 #endif

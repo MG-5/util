@@ -25,6 +25,7 @@ target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
 if (NOT DEFINED isEmbeddedCompiler)
     message(FATAL_ERROR "Required variable isEmbeddedCompiler is not in scope")
 endif ()
+
 if (${CMAKE_TESTING_ENABLED})
     find_package(PkgConfig)
     pkg_search_module(GTEST REQUIRED gtest)
