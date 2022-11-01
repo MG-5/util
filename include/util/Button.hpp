@@ -34,7 +34,7 @@ private:
     };
 
 public:
-    explicit Button(util::Gpio &buttonGpio, Callback callback, bool invert = false,
+    explicit Button(util::Gpio buttonGpio, Callback callback, bool invert = false,
                     const units::si::Time longPressTime = 500.0_ms)
         : buttonGpio{buttonGpio},   //
           ButtonCallback{callback}, //
@@ -54,7 +54,7 @@ private:
     static constexpr units::si::Time TimerReloadValue = 0.0_s;
     static constexpr units::si::Time DebounceTime = 50.0_ms;
 
-    util::Gpio &buttonGpio;
+    util::Gpio buttonGpio;
     const Callback ButtonCallback;
     const bool InvertedInput; //! true means that pulled up pin levels will be detected as pressed
     const units::si::Time LongPressTime;
