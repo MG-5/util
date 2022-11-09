@@ -1,12 +1,11 @@
 #include "wrappers/Mutex.hpp"
-#include <core/SafeAssert.h>
 #include <utility>
 
 namespace util::wrappers
 {
 Mutex::Mutex() : mutexHandle(xSemaphoreCreateMutex())
 {
-    SafeAssert(mutexHandle != nullptr);
+    assert(mutexHandle != nullptr);
 }
 
 Mutex::~Mutex()

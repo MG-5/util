@@ -10,7 +10,6 @@ add_library(${PROJECT_NAME} STATIC
         src/ScopedLock.cpp
         src/Task.cpp
         src/BinarySemaphore.cpp
-        src/IndependentWatchdog.cpp
         src/StreamBuffer.cpp
         src/EventGroup.cpp
         )
@@ -18,13 +17,7 @@ add_library(${PROJECT_NAME} STATIC
 target_include_directories(${PROJECT_NAME} PUBLIC
         include)
 
-target_link_libraries(${PROJECT_NAME} freertos core)
-
-target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
-
-if (NOT DEFINED isEmbeddedCompiler)
-    message(FATAL_ERROR "Required variable isEmbeddedCompiler is not in scope")
-endif ()
+target_link_libraries(${PROJECT_NAME})
 
 if (${CMAKE_TESTING_ENABLED})
     find_package(PkgConfig)

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "hal_header.h"
+#include "driver/gpio.h"
 #include <cstdint>
 
 namespace util
@@ -8,43 +8,30 @@ namespace util
 class Gpio
 {
 public:
-    using State = bool;
-    static constexpr State Low = false;
-    static constexpr State High = true;
+    explicit constexpr Gpio(gpio_num_t pin) : pin{pin} {};
 
-public:
-    constexpr Gpio(GPIO_TypeDef *port, uint16_t pin) : port{port}, pin{pin}
+    void init(gpio_mode_t mode)
     {
+        gpio_pad_select_gpio(pin);
+        gpio_set_direction(pin, mode);
     }
 
-    virtual ~Gpio() = default;
-
-    virtual State read()
+    void setPullMode(gpio_pull_mode_t mode)
     {
-        return HAL_GPIO_ReadPin(port, pin) == GPIO_PIN_SET ? High : Low;
+        gpio_set_pull_mode(pin, mode);
     }
 
-    virtual void write(State state)
+    bool read()
     {
-        HAL_GPIO_WritePin(port, pin, state == Low ? GPIO_PIN_RESET : GPIO_PIN_SET);
+        return gpio_get_level(pin);
     }
 
-    void toggle()
+    void write(bool state)
     {
-        HAL_GPIO_TogglePin(port, pin);
-    }
-
-    [[nodiscard]] GPIO_TypeDef *getPort() const
-    {
-        return port;
-    }
-    [[nodiscard]] uint16_t getPin() const
-    {
-        return pin;
+        gpio_set_level(pin, state);
     }
 
 private:
-    GPIO_TypeDef *const port;
-    const uint16_t pin;
+    gpio_num_t pin;
 };
 } // namespace util

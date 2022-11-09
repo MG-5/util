@@ -1,5 +1,6 @@
 #pragma once
 
+/* not supported yet for ESP32
 #include "LedBase.hpp"
 #include "util/PwmOutput.hpp"
 #include <limits>
@@ -184,3 +185,4 @@ private:
 };
 
 } // namespace util::pwm_led
+*/

@@ -1,4 +1,6 @@
 #pragma once
+
+/* not supported yet for ESP32
 #include <core/BuildConfiguration.hpp>
 #include <hal_header.h>
 
@@ -41,3 +43,4 @@ private:
 using PwmOutput8Bit = PwmOutput<uint8_t>;
 using PwmOutput16Bit = PwmOutput<uint16_t>;
 } // namespace util
+*/

@@ -1,5 +1,4 @@
 #include "wrappers/BinarySemaphore.hpp"
-#include <core/SafeAssert.h>
 #include <utility>
 
 namespace util::wrappers
@@ -7,7 +6,7 @@ namespace util::wrappers
 
 BinarySemaphore::BinarySemaphore() : semaphoreHandle(xSemaphoreCreateBinary())
 {
-    SafeAssert(semaphoreHandle != nullptr);
+    assert(semaphoreHandle != nullptr);
 }
 
 BinarySemaphore::~BinarySemaphore()

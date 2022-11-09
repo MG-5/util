@@ -1,7 +1,6 @@
 #pragma once
-#include <FreeRTOS.h>
-#include <core/SafeAssert.h>
-#include <event_groups.h>
+#include <freertos/FreeRTOS.h>
+#include <freertos/event_groups.h>
 
 namespace util::wrappers
 {

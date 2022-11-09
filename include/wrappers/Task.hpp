@@ -4,12 +4,13 @@
 #include "ITaskWithMemberFunction.hpp"
 #include "priorities.hpp"
 
-#include <FreeRTOS.h>
+#include <freertos/FreeRTOS.h>
+#include <freertos/event_groups.h>
+#include <freertos/task.h>
+
 #include <array>
-#include <event_groups.h>
 #include <functional>
 #include <limits>
-#include <task.h>
 
 namespace util::wrappers
 {

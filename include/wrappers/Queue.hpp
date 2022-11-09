@@ -1,9 +1,9 @@
 #pragma once
-#include <FreeRTOS.h>
-#include <core/SafeAssert.h>
+#include <freertos/FreeRTOS.h>
+#include <freertos/queue.h>
+
 #include <cstdint>
 #include <optional>
-#include <queue.h>
 #include <utility>
 
 namespace util::wrappers
@@ -14,7 +14,7 @@ class Queue
 public:
     explicit Queue(size_t length) : queueHandle(xQueueCreate(length, sizeof(T)))
     {
-        SafeAssert(queueHandle != nullptr);
+        assert(queueHandle != nullptr);
     };
 
     ~Queue()

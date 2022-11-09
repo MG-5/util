@@ -7,7 +7,7 @@ namespace util::wrappers
 StreamBuffer::StreamBuffer(const size_t BufferSize, const size_t TriggerLevel)
     : streamHandle(xStreamBufferCreate(BufferSize, TriggerLevel))
 {
-    SafeAssert(streamHandle != nullptr);
+    assert(streamHandle != nullptr);
 }
 
 StreamBuffer::~StreamBuffer()
@@ -28,37 +28,32 @@ bool StreamBuffer::isFull()
     return xStreamBufferIsFull(streamHandle) == pdTRUE;
 }
 
-size_t StreamBuffer::receive(std::span<uint8_t> buffer, const TickType_t ticksToWait)
+size_t StreamBuffer::receive(uint8_t *buffer, size_t bufferSize, const TickType_t ticksToWait)
 {
-    return xStreamBufferReceive(streamHandle, buffer.data(), buffer.size(), ticksToWait);
+    return xStreamBufferReceive(streamHandle, buffer, bufferSize, ticksToWait);
 }
 
-size_t StreamBuffer::receiveFromISR(std::span<uint8_t> buffer,
+size_t StreamBuffer::receiveFromISR(uint8_t *buffer, size_t bufferSize,
                                     BaseType_t *pxHigherPriorityTaskWoken)
 {
-    return xStreamBufferReceiveFromISR(streamHandle, buffer.data(), buffer.size(),
-                                       pxHigherPriorityTaskWoken);
+    return xStreamBufferReceiveFromISR(streamHandle, buffer, bufferSize, pxHigherPriorityTaskWoken);
 }
 
 bool StreamBuffer::reset()
 {
-    // this is not interrupt safe for some versions of freertos
-    // https://forums.freertos.org/t/xstreambufferreset-is-not-interrupt-safe/7202/2
-    portENTER_CRITICAL();
     const auto res = xStreamBufferReset(streamHandle) == pdPASS;
-    portEXIT_CRITICAL();
     return res;
 }
 
-size_t StreamBuffer::send(std::span<uint8_t> buffer, const TickType_t ticksToWait)
+size_t StreamBuffer::send(uint8_t *buffer, size_t bufferSize, const TickType_t ticksToWait)
 {
-    return xStreamBufferSend(streamHandle, buffer.data(), buffer.size(), ticksToWait);
+    return xStreamBufferSend(streamHandle, buffer, bufferSize, ticksToWait);
 }
 
-size_t StreamBuffer::sendFromISR(std::span<uint8_t> buffer, BaseType_t *pxHigherPriorityTaskWoken)
+size_t StreamBuffer::sendFromISR(uint8_t *buffer, size_t bufferSize,
+                                 BaseType_t *pxHigherPriorityTaskWoken)
 {
-    return xStreamBufferSendFromISR(streamHandle, buffer.data(), buffer.size(),
-                                    pxHigherPriorityTaskWoken);
+    return xStreamBufferSendFromISR(streamHandle, buffer, bufferSize, pxHigherPriorityTaskWoken);
 }
 
 bool StreamBuffer::setTriggerLevel(const size_t triggerLevel)

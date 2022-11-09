@@ -3,8 +3,8 @@
 #include "units/si/frequency.hpp"
 #include "units/si/scalar.hpp"
 #include "units/si/time.hpp"
-#include <FreeRTOS.h>
 #include <cstdint>
+#include <freertos/FreeRTOS.h>
 
 constexpr uint32_t toMilliSeconds(const units::si::Time time)
 {

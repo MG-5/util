@@ -1,5 +1,4 @@
 #include <algorithm>
-#include <core/SafeAssert.h>
 
 namespace util
 {
@@ -8,10 +7,10 @@ static OutputType mapValue(const InputType fromMin, const InputType fromMax, con
                            const OutputType toMax, const InputType value)
 {
     // excluding everything not unit tested and not needed with devices
-    SafeAssert(fromMin < fromMax);
-    SafeAssert(toMin < toMax);
-    SafeAssert(!(fromMax == 0 && fromMin < 0));
-    SafeAssert(!(toMax == 0 && toMin < 0));
+    assert(fromMin < fromMax);
+    assert(toMin < toMax);
+    assert(!(fromMax == 0 && fromMin < 0));
+    assert(!(toMax == 0 && toMin < 0));
 
     const auto ToMin = static_cast<float>(toMin);
     const auto ToMax = static_cast<float>(toMax);
