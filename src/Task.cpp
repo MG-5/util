@@ -15,8 +15,11 @@ Task::Task(TaskFunction_t taskCode, const char *name, uint16_t stackDepth, void 
     : IFreeRTOSTask(name, stackDepth, priority), taskCode(taskCode), taskParameter(parameter)
 {
     assert(taskCode != nullptr);
-    xTaskCreate(&Task::taskMain, name, stackDepth, reinterpret_cast<void *>(this), priority,
+
+    const size_t StackSizeInBytes = stackDepth * 4; // ESP-IDF want bytes, not words as stack size
+    xTaskCreate(&Task::taskMain, name, StackSizeInBytes, reinterpret_cast<void *>(this), priority,
                 &taskHandle);
+
     assert(taskHandle != nullptr);
 
     registerTask(taskHandle);
