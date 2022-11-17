@@ -4,6 +4,8 @@
 #include <units/si/time.hpp>
 #include <utility>
 
+#include "esp_log.h"
+
 namespace util::wrappers
 {
 size_t Task::taskListIndex{0};
@@ -21,6 +23,9 @@ Task::Task(TaskFunction_t taskCode, const char *name, uint16_t stackDepth, void 
                 &taskHandle);
 
     assert(taskHandle != nullptr);
+
+    ESP_LOGI("[Task]", "Created task \"%s\" with %d words stack and prio: %d.", name, stackDepth,
+             priority);
 
     registerTask(taskHandle);
 }
