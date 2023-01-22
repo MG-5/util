@@ -18,14 +18,17 @@ Task::Task(TaskFunction_t taskCode, const char *name, uint16_t stackDepth, void 
 {
     assert(taskCode != nullptr);
 
-    const size_t StackSizeInBytes = stackDepth * 4; // ESP-IDF want bytes, not words as stack size
+    // ESP-IDF want bytes (uint8_t), not uint32_t as stack size
+    constexpr auto Factor = sizeof(uint32_t) / sizeof(portSTACK_TYPE);
+    const size_t StackSizeInBytes = stackDepth * Factor;
+
     xTaskCreate(&Task::taskMain, name, StackSizeInBytes, reinterpret_cast<void *>(this), priority,
                 &taskHandle);
 
     assert(taskHandle != nullptr);
 
-    ESP_LOGI("[Task]", "Created task \"%s\" with %d words stack and prio: %d.", name, stackDepth,
-             priority);
+    ESP_LOGI("[Task]", "Created task \"%s\" with %d 32-bit frames stack and prio: %d.", name,
+             stackDepth, priority);
 
     registerTask(taskHandle);
 }
