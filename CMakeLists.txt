@@ -19,6 +19,11 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 
 target_link_libraries(${PROJECT_NAME})
 
+if(ESP_PLATFORM)
+  # On ESP-IDF we need the driver component
+  target_link_libraries(${PROJECT_NAME} PRIVATE idf::driver)
+endif()
+
 if (${CMAKE_TESTING_ENABLED})
     find_package(PkgConfig)
     pkg_search_module(GTEST REQUIRED gtest)

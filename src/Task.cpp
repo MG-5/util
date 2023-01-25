@@ -12,7 +12,7 @@ size_t Task::taskListIndex{0};
 std::array<TaskHandle_t, Task::MaxTasks> Task::taskList{};
 EventGroupHandle_t Task::syncEventGroup = xEventGroupCreate();
 
-Task::Task(TaskFunction_t taskCode, const char *name, uint16_t stackDepth, void *parameter,
+Task::Task(TaskFunction_t taskCode, const char *name, uint32_t stackDepth, void *parameter,
            UBaseType_t priority)
     : IFreeRTOSTask(name, stackDepth, priority), taskCode(taskCode), taskParameter(parameter)
 {
@@ -27,7 +27,7 @@ Task::Task(TaskFunction_t taskCode, const char *name, uint16_t stackDepth, void 
 
     assert(taskHandle != nullptr);
 
-    ESP_LOGI("[Task]", "Created task \"%s\" with %d 32-bit frames stack and prio: %d.", name,
+    ESP_LOGI("[Task]", "Created task \"%s\" with %ld 32-bit frames stack and prio: %d.", name,
              stackDepth, priority);
 
     registerTask(taskHandle);
@@ -43,20 +43,20 @@ void Task::registerTask(TaskHandle_t handle)
     taskList.at(taskListIndex++) = handle;
 }
 
-int32_t Task::notifyWait(const uint32_t ulBitsToClearOnEntry, const uint32_t ulBitsToClearOnExit,
-                         uint32_t *pulNotificationValue, const uint32_t xTicksToWait)
+int Task::notifyWait(const uint32_t ulBitsToClearOnEntry, const uint32_t ulBitsToClearOnExit,
+                     uint32_t *pulNotificationValue, const uint32_t xTicksToWait)
 {
     return xTaskNotifyWait(ulBitsToClearOnEntry, ulBitsToClearOnExit, pulNotificationValue,
                            xTicksToWait);
 }
 
-int32_t Task::notify(const uint32_t ulValue, const NotifyAction eAction)
+int Task::notify(const uint32_t ulValue, const NotifyAction eAction)
 {
     return xTaskNotify(taskHandle, ulValue, notifyActionConverter(eAction));
 }
 
-int32_t Task::notifyFromISR(const uint32_t ulValue, const NotifyAction eAction,
-                            int32_t *pxHigherPriorityTaskWoken)
+int Task::notifyFromISR(const uint32_t ulValue, const NotifyAction eAction,
+                        int *pxHigherPriorityTaskWoken)
 {
     return xTaskNotifyFromISR(taskHandle, ulValue, notifyActionConverter(eAction),
                               pxHigherPriorityTaskWoken);

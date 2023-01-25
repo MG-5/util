@@ -22,7 +22,7 @@ namespace util::wrappers
 class Task : public IFreeRTOSTask
 {
 public:
-    Task(TaskFunction_t taskCode, const char *name, uint16_t stackDepth, void *parameter,
+    Task(TaskFunction_t taskCode, const char *name, uint32_t stackDepth, void *parameter,
          UBaseType_t priority);
 
     ~Task() override;
@@ -33,13 +33,13 @@ public:
     Task &operator=(Task &&other) noexcept;
 
     static constexpr uint32_t ClearAllBits = std::numeric_limits<uint32_t>::max();
-    int32_t notifyWait(uint32_t ulBitsToClearOnEntry, uint32_t ulBitsToClearOnExit,
-                       uint32_t *pulNotificationValue, uint32_t xTicksToWait) override;
-    int32_t notify(uint32_t ulValue, NotifyAction eAction) override;
-    int32_t notifyFromISR(uint32_t ulValue, NotifyAction eAction,
-                          int32_t *pxHigherPriorityTaskWoken) override;
+    int notifyWait(uint32_t ulBitsToClearOnEntry, uint32_t ulBitsToClearOnExit,
+                   uint32_t *pulNotificationValue, uint32_t xTicksToWait) override;
+    int notify(uint32_t ulValue, NotifyAction eAction) override;
+    int notifyFromISR(uint32_t ulValue, NotifyAction eAction,
+                      int *pxHigherPriorityTaskWoken) override;
     void notifyGive() override;
-    void notifyTake(uint32_t waittime) override;
+    void notifyTake(TickType_t waittime) override;
     void delay(units::si::Time time) override;
 
     [[nodiscard]] static constexpr eNotifyAction notifyActionConverter(NotifyAction action);

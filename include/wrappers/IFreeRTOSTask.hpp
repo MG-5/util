@@ -21,17 +21,17 @@ enum class NotifyAction
 class IFreeRTOSTask
 {
 public:
-    IFreeRTOSTask(const std::string_view name, uint16_t stackDepth, uint32_t priority)
+    IFreeRTOSTask(const std::string_view name, uint32_t stackDepth, uint32_t priority)
         : taskName(name), taskStackDepth(stackDepth), taskPriority(priority){};
     virtual ~IFreeRTOSTask() = default;
 
-    virtual int32_t notifyWait(uint32_t ulBitsToClearOnEntry, uint32_t ulBitsToClearOnExit,
-                               uint32_t *pulNotificationValue, uint32_t xTicksToWait) = 0;
+    virtual int notifyWait(uint32_t ulBitsToClearOnEntry, uint32_t ulBitsToClearOnExit,
+                           uint32_t *pulNotificationValue, uint32_t xTicksToWait) = 0;
 
-    virtual int32_t notify(uint32_t ulValue, NotifyAction eAction) = 0;
+    virtual int notify(uint32_t ulValue, NotifyAction eAction) = 0;
 
-    virtual int32_t notifyFromISR(uint32_t ulValue, NotifyAction eAction,
-                                  int32_t *pxHigherPriorityTaskWoken) = 0;
+    virtual int notifyFromISR(uint32_t ulValue, NotifyAction eAction,
+                              int *pxHigherPriorityTaskWoken) = 0;
 
     virtual void notifyGive() = 0;
     virtual void notifyTake(uint32_t waittime) = 0;

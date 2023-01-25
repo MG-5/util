@@ -12,7 +12,7 @@ public:
 
     void init(gpio_mode_t mode)
     {
-        gpio_pad_select_gpio(pin);
+        gpio_reset_pin(pin);
         gpio_set_direction(pin, mode);
     }
 
