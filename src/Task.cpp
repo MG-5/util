@@ -27,7 +27,7 @@ Task::Task(TaskFunction_t taskCode, const char *name, uint32_t stackDepth, void 
 
     assert(taskHandle != nullptr);
 
-    ESP_LOGI("[Task]", "Created task \"%s\" with %ld 32-bit frames stack and prio: %d.", name,
+    ESP_LOGI("[Task]", "Created task \"%s\" | %ld 32-bit frames stack | prio: %d.", name,
              stackDepth, priority);
 
     registerTask(taskHandle);
