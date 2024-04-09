@@ -1,7 +1,7 @@
 #pragma once
 #include <FreeRTOS.h>
 #include <core/SafeAssert.h>
-#include <core/SpanCompatibility.hpp>
+#include <span>
 #include <stream_buffer.h>
 
 namespace util::wrappers

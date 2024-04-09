@@ -1,5 +1,9 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.5)
 cmake_policy(SET CMP0048 NEW)
+
+if(NOT CMAKE_CXX_STANDARD EQUAL 20)
+    message(FATAL_ERROR "The main CMakeLists should use C++20 to use this library.")
+endif()
 
 project(util LANGUAGES CXX C ASM)
 
