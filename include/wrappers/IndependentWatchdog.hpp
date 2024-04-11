@@ -1,6 +1,6 @@
 #pragma once
 
-#include <hal_header.h>
+#include <main.h>
 
 #ifdef HAL_IWDG_MODULE_ENABLED
 namespace util::wrappers
