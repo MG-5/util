@@ -6,7 +6,7 @@
 namespace util
 {
 template <typename InputType, typename OutputType>
-static OutputType mapValue(const InputType fromMin, const InputType fromMax, const OutputType toMin,
+inline OutputType mapValue(const InputType fromMin, const InputType fromMax, const OutputType toMin,
                            const OutputType toMax, const InputType value)
 {
     // excluding everything not unit tested and not needed with devices
@@ -15,14 +15,17 @@ static OutputType mapValue(const InputType fromMin, const InputType fromMax, con
     SafeAssert(!(fromMax == 0 && fromMin < 0));
     SafeAssert(!(toMax == 0 && toMin < 0));
 
-    const auto ToMin = static_cast<float>(toMin);
-    const auto ToMax = static_cast<float>(toMax);
-    const auto FromMin = static_cast<float>(fromMin);
-    const auto FromMax = static_cast<float>(fromMax);
+    // Clamp the input value to the from range
+    const InputType clampedValue = (value < fromMin)   ? fromMin
+                                   : (value > fromMax) ? fromMax
+                                                       : value;
 
-    const float v{std::clamp(static_cast<float>(value), FromMin, FromMax)};
+    // Calculate the scaling factor
+    const auto fromRange = fromMax - fromMin;
+    const auto toRange = toMax - toMin;
+    const auto scaledValue = (clampedValue - fromMin) * toRange / fromRange;
 
-    // https://stackoverflow.com/questions/5731863/mapping-a-numeric-range-onto-another
-    return static_cast<OutputType>(ToMin + (ToMax - ToMin) * ((v - FromMin) / (FromMax - FromMin)));
+    // Compute the mapped value
+    return toMin + scaledValue;
 }
 } // namespace util
