@@ -20,31 +20,35 @@ public:
     {
         ShortPress,
         LongPress,
+        SuperLongPress,
         StopLongPress
     };
 
     using Callback = std::function<void(Action action)>;
 
-private:
-    enum class InternalState
-    {
-        Idle,
-        Pressed,
-        LongPress
-    };
+    explicit Button(util::Gpio buttonGpio, bool isInverted = false, Callback callback = nullptr)
+        : buttonGpio{buttonGpio}, isInverted{isInverted}, callback{callback} {};
 
-public:
-    explicit Button(util::Gpio buttonGpio, Callback callback, bool invert = false,
-                    const units::si::Time longPressTime = 500.0_ms)
-        : buttonGpio{buttonGpio},   //
-          ButtonCallback{callback}, //
-          InvertedInput{invert},    //
-          LongPressTime{longPressTime}
-    {
-    }
+    Button(util::Gpio buttonGpio, const units::si::Time longPressTime, bool isInverted = false,
+           Callback callback = nullptr)
+        : buttonGpio{buttonGpio}, LongPressTime{longPressTime},
+          isInverted{isInverted}, callback{callback} {};
+
+    Button(util::Gpio buttonGpio, const units::si::Time longPressTime,
+           const units::si::Time superLongPressTime, bool isInverted = false,
+           Callback callback = nullptr)
+        : buttonGpio{buttonGpio}, LongPressTime{longPressTime},
+          SuperLongPressTime{superLongPressTime}, isInverted{isInverted}, callback{callback} {};
 
     void update(units::si::Time timePassed);
-    bool isPressing() const;
+
+    void setCallback(Callback newCallback)
+    {
+        callback = newCallback;
+    }
+
+    /// returns true if button state is long pressed or super long pressed at the moment
+    [[nodiscard]] bool isPressing() const;
 
 private:
     void loadTimer();
@@ -52,13 +56,25 @@ private:
     [[nodiscard]] units::si::Time getPassedTime() const;
 
     static constexpr units::si::Time TimerReloadValue = 0.0_s;
-    static constexpr units::si::Time DebounceTime = 50.0_ms;
+    static constexpr units::si::Time DebounceTime = 20.0_ms;
 
     util::Gpio buttonGpio;
-    const Callback ButtonCallback;
-    const bool InvertedInput; //! true means that pulled up pin levels will be detected as pressed
-    const units::si::Time LongPressTime;
+    const units::si::Time LongPressTime = 500.0_ms;
+    const units::si::Time SuperLongPressTime = 2.0_s;
+    bool isInverted = false;
+    Callback callback;
+
+    enum class InternalState
+    {
+        Idle,
+        Pressed,
+        LongPress,
+        SuperLongPress
+    };
+
     InternalState internalState = InternalState::Idle;
     units::si::Time pressTimer = TimerReloadValue;
+
+    void buttonCallback(Action action);
 };
 } // namespace util
