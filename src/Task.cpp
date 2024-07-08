@@ -8,9 +8,6 @@
 
 namespace util::wrappers
 {
-size_t Task::taskListIndex{0};
-std::array<TaskHandle_t, Task::MaxTasks> Task::taskList{};
-EventGroupHandle_t Task::syncEventGroup = xEventGroupCreate();
 
 //-----------------------------------------------------------------
 Task::Task(TaskFunction_t taskCode, const char *name, uint16_t stackDepth, void *parameter,
@@ -79,7 +76,7 @@ Task::~Task()
 [[noreturn]] void Task::taskMain(void *instance)
 {
     Task *task = reinterpret_cast<Task *>(instance);
-    xEventGroupWaitBits(syncEventGroup, AllTasksWaitFlag, pdFALSE, pdFALSE, portMAX_DELAY);
+    syncEventGroup.waitBits(AllTasksWaitFlag, pdFALSE, pdFALSE, portMAX_DELAY);
     task->taskCode(task->taskParameter);
     for (;;)
     {
@@ -102,7 +99,7 @@ void Task::notifyTake(const uint32_t waittime)
 //-----------------------------------------------------------------
 void Task::applicationIsReadyStartAllTasks()
 {
-    xEventGroupSetBits(syncEventGroup, AllTasksWaitFlag);
+    syncEventGroup.setBits(AllTasksWaitFlag);
 }
 
 //-----------------------------------------------------------------

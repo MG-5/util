@@ -3,6 +3,7 @@
 #include "IFreeRTOSTask.hpp"
 #include "ITaskWithMemberFunction.hpp"
 #include "priorities.hpp"
+#include "wrappers/EventGroup.hpp"
 
 #include <FreeRTOS.h>
 #include <array>
@@ -59,9 +60,9 @@ protected:
 
     [[noreturn]] static void taskMain(void *);
 
-    static std::array<TaskHandle_t, MaxTasks> taskList;
-    static size_t taskListIndex;
-    static EventGroupHandle_t syncEventGroup;
+    inline static std::array<TaskHandle_t, MaxTasks> taskList{};
+    inline static size_t taskListIndex = 0;
+    inline static EventGroup syncEventGroup;
     static constexpr EventBits_t AllTasksWaitFlag = 1 << 0;
 };
 
