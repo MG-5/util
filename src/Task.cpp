@@ -12,6 +12,7 @@ size_t Task::taskListIndex{0};
 std::array<TaskHandle_t, Task::MaxTasks> Task::taskList{};
 EventGroupHandle_t Task::syncEventGroup = xEventGroupCreate();
 
+//-----------------------------------------------------------------
 Task::Task(TaskFunction_t taskCode, const char *name, uint16_t stackDepth, void *parameter,
            UBaseType_t priority)
     : IFreeRTOSTask(name, stackDepth, priority), taskCode(taskCode), taskParameter(parameter)
@@ -24,6 +25,7 @@ Task::Task(TaskFunction_t taskCode, const char *name, uint16_t stackDepth, void 
     registerTask(taskHandle);
 }
 
+//-----------------------------------------------------------------
 void Task::registerTask(TaskHandle_t handle)
 {
     if constexpr (core::BuildConfiguration::IsEmbeddedBuild)
@@ -38,6 +40,7 @@ void Task::registerTask(TaskHandle_t handle)
     }
 }
 
+//-----------------------------------------------------------------
 int32_t Task::notifyWait(const uint32_t ulBitsToClearOnEntry, const uint32_t ulBitsToClearOnExit,
                          uint32_t *pulNotificationValue, const uint32_t xTicksToWait)
 {
@@ -45,11 +48,13 @@ int32_t Task::notifyWait(const uint32_t ulBitsToClearOnEntry, const uint32_t ulB
                            xTicksToWait);
 }
 
+//-----------------------------------------------------------------
 int32_t Task::notify(const uint32_t ulValue, const NotifyAction eAction)
 {
     return xTaskNotify(taskHandle, ulValue, notifyActionConverter(eAction));
 }
 
+//-----------------------------------------------------------------
 int32_t Task::notifyFromISR(const uint32_t ulValue, const NotifyAction eAction,
                             int32_t *pxHigherPriorityTaskWoken)
 {
@@ -61,6 +66,7 @@ int32_t Task::notifyFromISR(const uint32_t ulValue, const NotifyAction eAction,
 #endif
 }
 
+//-----------------------------------------------------------------
 Task::~Task()
 {
     if (taskHandle != nullptr)
@@ -69,6 +75,7 @@ Task::~Task()
     }
 }
 
+//-----------------------------------------------------------------
 [[noreturn]] void Task::taskMain(void *instance)
 {
     Task *task = reinterpret_cast<Task *>(instance);
@@ -80,21 +87,25 @@ Task::~Task()
     }
 }
 
+//-----------------------------------------------------------------
 void Task::notifyGive()
 {
     xTaskNotifyGive(taskHandle);
 }
 
+//-----------------------------------------------------------------
 void Task::notifyTake(const uint32_t waittime)
 {
     ulTaskNotifyTake(pdTRUE, waittime);
 }
 
+//-----------------------------------------------------------------
 void Task::applicationIsReadyStartAllTasks()
 {
     xEventGroupSetBits(syncEventGroup, AllTasksWaitFlag);
 }
 
+//-----------------------------------------------------------------
 constexpr eNotifyAction Task::notifyActionConverter(const NotifyAction action)
 {
     switch (action)
@@ -117,17 +128,20 @@ constexpr eNotifyAction Task::notifyActionConverter(const NotifyAction action)
     }
 }
 
+//-----------------------------------------------------------------
 void Task::delay(const units::si::Time time)
 {
     vTaskDelay(toOsTicks(time));
 }
 
+//-----------------------------------------------------------------
 Task::Task(Task &&other) noexcept
     : IFreeRTOSTask(other.taskName, other.taskStackDepth, other.taskPriority)
 {
     *this = std::forward<Task>(other);
 }
 
+//-----------------------------------------------------------------
 Task &Task::operator=(Task &&other) noexcept
 {
     taskHandle = std::exchange(other.taskHandle, nullptr);

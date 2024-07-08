@@ -6,6 +6,8 @@ namespace util::wrappers
 IndependentWatchdog::IndependentWatchdog(IWDG_HandleTypeDef &iwdt) : iwdg(iwdt)
 {
 }
+
+//-----------------------------------------------------------------
 void IndependentWatchdog::refresh()
 {
     HAL_IWDG_Refresh(&iwdg);

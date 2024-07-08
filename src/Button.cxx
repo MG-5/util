@@ -45,21 +45,25 @@ void Button::update(const units::si::Time timePassed)
     }
 }
 
+//-----------------------------------------------------------------
 void Button::loadTimer()
 {
     pressTimer = TimerReloadValue;
 }
 
+//-----------------------------------------------------------------
 void Button::updateTimer(const units::si::Time timePassed)
 {
     pressTimer += timePassed;
 }
 
+//-----------------------------------------------------------------
 units::si::Time Button::getPassedTime() const
 {
     return pressTimer;
 }
 
+//-----------------------------------------------------------------
 bool Button::isPressing() const
 {
     return (internalState == InternalState::LongPress);
