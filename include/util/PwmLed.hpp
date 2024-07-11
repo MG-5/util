@@ -2,31 +2,33 @@
 
 #include "LedBase.hpp"
 #include "util/PwmOutput.hpp"
-#include <limits>
 
 namespace util::pwm_led
 {
 
 //--------------------------------------------------------------------------------------------------
-template <typename TimerResolution>
+template <size_t NumberOfResolutionBits>
 class SingleLed : public LedBase
 {
 
 public:
-    explicit SingleLed(PwmOutput<TimerResolution> pwmOutput) : pwmOutput(pwmOutput){};
+    explicit SingleLed(PwmOutput<NumberOfResolutionBits> pwmOutput) : pwmOutput(pwmOutput){};
 
-    void turnOnInherited() override
+    void startPwmTimer()
     {
-        pwmOutput.setMaximumPwm();
-    }
-
-    void turnOffInherited() override
-    {
-        pwmOutput.setPwmValue(0);
+        pwmOutput.startPwmTimer();
     }
 
 private:
-    PwmOutput<TimerResolution> pwmOutput;
+    void update() override
+    {
+        if (isOn)
+            pwmOutput.setMaximumPwm();
+        else
+            pwmOutput.setPwmValue(0);
+    }
+
+    PwmOutput<NumberOfResolutionBits> pwmOutput;
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -39,13 +41,19 @@ enum class DualLedColor
 };
 
 //--------------------------------------------------------------------------------------------------
-template <typename TimerResolution>
+template <size_t NumberOfResolutionBits>
 class DualLed : public MultiColorLedBase<DualLedColor>
 {
 public:
-    DualLed(PwmOutput<TimerResolution> ledRedPwmOutput,
-            PwmOutput<TimerResolution> ledGreenPwmOutput)
+    DualLed(PwmOutput<NumberOfResolutionBits> ledRedPwmOutput,
+            PwmOutput<NumberOfResolutionBits> ledGreenPwmOutput)
         : ledRedPwmOutput(ledRedPwmOutput), ledGreenPwmOutput(ledGreenPwmOutput){};
+
+    void startPwmTimer()
+    {
+        ledRedPwmOutput.startPwmTimer();
+        ledGreenPwmOutput.startPwmTimer();
+    }
 
 private:
     void update() override
@@ -61,12 +69,12 @@ private:
 
             case DualLedColor::Yellow:
                 ledRedPwmOutput.setMaximumPwm();
-                ledGreenPwmOutput.setPwmValue(std::numeric_limits<TimerResolution>::max() / 3);
+                ledGreenPwmOutput.setPwmValue(((1 << NumberOfResolutionBits) - 1) / 3);
                 break;
 
             case DualLedColor::Orange:
                 ledRedPwmOutput.setMaximumPwm();
-                ledGreenPwmOutput.setPwmValue(std::numeric_limits<TimerResolution>::max() / 8);
+                ledGreenPwmOutput.setPwmValue(((1 << NumberOfResolutionBits) - 1) / 8);
                 break;
 
             case DualLedColor::Green:
@@ -87,8 +95,8 @@ private:
         }
     }
 
-    PwmOutput<TimerResolution> ledRedPwmOutput;
-    PwmOutput<TimerResolution> ledGreenPwmOutput;
+    PwmOutput<NumberOfResolutionBits> ledRedPwmOutput;
+    PwmOutput<NumberOfResolutionBits> ledGreenPwmOutput;
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -104,15 +112,22 @@ enum class TripleLedColor
 };
 
 //--------------------------------------------------------------------------------------------------
-template <typename TimerResolution>
+template <size_t NumberOfResolutionBits>
 class TripleLed : public MultiColorLedBase<TripleLedColor>
 {
 public:
-    TripleLed(PwmOutput<TimerResolution> ledRedPwmOutput,
-              PwmOutput<TimerResolution> ledGreenPwmOutput,
-              PwmOutput<TimerResolution> ledBluePwmOutput)
+    TripleLed(PwmOutput<NumberOfResolutionBits> ledRedPwmOutput,
+              PwmOutput<NumberOfResolutionBits> ledGreenPwmOutput,
+              PwmOutput<NumberOfResolutionBits> ledBluePwmOutput)
         : ledRedPwmOutput{ledRedPwmOutput}, ledGreenPwmOutput{ledGreenPwmOutput},
           ledBluePwmOutput{ledBluePwmOutput} {};
+
+    void startPwmTimer()
+    {
+        ledRedPwmOutput.startPwmTimer();
+        ledGreenPwmOutput.startPwmTimer();
+        ledBluePwmOutput.startPwmTimer();
+    }
 
 private:
     void update() override
@@ -129,13 +144,13 @@ private:
 
             case TripleLedColor::Yellow:
                 ledRedPwmOutput.setMaximumPwm();
-                ledGreenPwmOutput.setPwmValue(std::numeric_limits<TimerResolution>::max() / 3);
+                ledGreenPwmOutput.setPwmValue(((1 << NumberOfResolutionBits) - 1) / 3);
                 ledBluePwmOutput.setPwmValue(0);
                 break;
 
             case TripleLedColor::Orange:
                 ledRedPwmOutput.setMaximumPwm();
-                ledGreenPwmOutput.setPwmValue(std::numeric_limits<TimerResolution>::max() / 8);
+                ledGreenPwmOutput.setPwmValue(((1 << NumberOfResolutionBits) - 1) / 8);
                 ledBluePwmOutput.setPwmValue(0);
                 break;
 
@@ -154,13 +169,13 @@ private:
             case TripleLedColor::Turquoise:
                 ledRedPwmOutput.setPwmValue(0);
                 ledGreenPwmOutput.setMaximumPwm();
-                ledBluePwmOutput.setPwmValue(std::numeric_limits<TimerResolution>::max() / 2);
+                ledBluePwmOutput.setPwmValue(((1 << NumberOfResolutionBits) - 1) / 2);
                 break;
 
             case TripleLedColor::Purple:
-                ledRedPwmOutput.setPwmValue(std::numeric_limits<TimerResolution>::max());
+                ledRedPwmOutput.setPwmValue(((1 << NumberOfResolutionBits) - 1));
                 ledGreenPwmOutput.setPwmValue(0);
-                ledBluePwmOutput.setPwmValue(std::numeric_limits<TimerResolution>::max() / 2);
+                ledBluePwmOutput.setPwmValue(((1 << NumberOfResolutionBits) - 1) / 2);
                 break;
 
             default:
@@ -178,9 +193,9 @@ private:
         }
     }
 
-    PwmOutput<TimerResolution> ledRedPwmOutput;
-    PwmOutput<TimerResolution> ledGreenPwmOutput;
-    PwmOutput<TimerResolution> ledBluePwmOutput;
+    PwmOutput<NumberOfResolutionBits> ledRedPwmOutput;
+    PwmOutput<NumberOfResolutionBits> ledGreenPwmOutput;
+    PwmOutput<NumberOfResolutionBits> ledBluePwmOutput;
 };
 
 } // namespace util::pwm_led

@@ -9,6 +9,11 @@ class LedBase
 public:
     virtual ~LedBase() = default;
 
+    void setState(bool newState)
+    {
+        newState ? turnOn() : turnOff();
+    }
+
     /// Turns on LED and resets it's blinking/flash state.
     void turnOn()
     {
