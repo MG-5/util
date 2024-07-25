@@ -1,5 +1,6 @@
 #pragma once
 #include <core/BuildConfiguration.hpp>
+#include <core/SafeAssert.h>
 
 #include <limits>
 
