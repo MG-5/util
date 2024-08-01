@@ -65,7 +65,7 @@ public:
         }
         break;
 
-        case LedState::Normal:
+        [[likely]] case LedState::Normal:
         default:
             break;
         }

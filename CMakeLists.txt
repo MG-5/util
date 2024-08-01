@@ -7,6 +7,8 @@ endif()
 
 project(util LANGUAGES CXX C ASM)
 
+add_subdirectory(gcem)
+
 add_library(${PROJECT_NAME} STATIC
         src/Button.cxx
         src/RecursiveMutex.cpp
@@ -24,7 +26,8 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 
 target_link_libraries(${PROJECT_NAME}
     stm32cubemx  
-    core  
+    core
+    gcem  
 )
 
 if (${CMAKE_TESTING_ENABLED})

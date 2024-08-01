@@ -1,0 +1,4 @@
+[submodule "gcem"]
+	path = gcem
+	url = ../../kthohr/gcem.git
+	branch = master
