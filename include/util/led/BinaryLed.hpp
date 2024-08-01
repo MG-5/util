@@ -2,7 +2,7 @@
 #include "LedBase.hpp"
 #include "util/gpio.hpp"
 
-namespace util::binary_led
+namespace util::led::binary
 {
 //--------------------------------------------------------------------------------------------------
 class SingleLed : public LedBase
@@ -40,8 +40,10 @@ private:
     {
         if (isOn)
         {
-            ledRedGpio.write((currentColor == DualLedColor::Red || currentColor == DualLedColor::Yellow));
-            ledGreenGpio.write((currentColor == DualLedColor::Green || currentColor == DualLedColor::Yellow));
+            ledRedGpio.write(
+                (currentColor == DualLedColor::Red || currentColor == DualLedColor::Yellow));
+            ledGreenGpio.write(
+                (currentColor == DualLedColor::Green || currentColor == DualLedColor::Yellow));
         }
         else
         {
@@ -53,4 +55,4 @@ private:
     Gpio ledRedGpio;
     Gpio ledGreenGpio;
 };
-} // namespace util::binary_led
+} // namespace util::led::binary

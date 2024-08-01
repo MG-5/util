@@ -2,7 +2,7 @@
 
 #include "helpers/freertos.hpp"
 
-namespace util
+namespace util::led
 {
 class LedBase
 {
@@ -131,4 +131,4 @@ protected:
     LedColor currentColor{};
 };
 
-} // namespace util
+} // namespace util::led

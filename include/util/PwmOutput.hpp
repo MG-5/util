@@ -27,11 +27,16 @@ public:
             __HAL_TIM_SET_COMPARE(TimerHandle, ChannelNumber, pwmValue);
     }
 
-    void setMaximumPwm() const
+    size_t getMaximumPwmValue() const
+    {
+        return (1 << NumberOfResolutionBits) - 1;
+    }
+
+    void setPwmToMaximum() const
     {
         if constexpr (core::BuildConfiguration::IsEmbeddedBuild)
         {
-            __HAL_TIM_SET_COMPARE(TimerHandle, ChannelNumber, (1 << NumberOfResolutionBits) - 1);
+            __HAL_TIM_SET_COMPARE(TimerHandle, ChannelNumber, getMaximumPwmValue());
         }
     }
 

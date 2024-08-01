@@ -3,7 +3,7 @@
 #include "LedBase.hpp"
 #include "util/PwmOutput.hpp"
 
-namespace util::pwm_led
+namespace util::led::pwm
 {
 
 //--------------------------------------------------------------------------------------------------
@@ -12,7 +12,7 @@ class SingleLed : public LedBase
 {
 
 public:
-    explicit SingleLed(PwmOutput<NumberOfResolutionBits> pwmOutput) : pwmOutput(pwmOutput){};
+    explicit SingleLed(PwmOutput<NumberOfResolutionBits> pwmOutput) : pwmOutput(pwmOutput) {};
 
     void startPwmTimer()
     {
@@ -23,7 +23,7 @@ private:
     void update() override
     {
         if (isOn)
-            pwmOutput.setMaximumPwm();
+            pwmOutput.setPwmToMaximum();
         else
             pwmOutput.setPwmValue(0);
     }
@@ -47,7 +47,7 @@ class DualLed : public MultiColorLedBase<DualLedColor>
 public:
     DualLed(PwmOutput<NumberOfResolutionBits> ledRedPwmOutput,
             PwmOutput<NumberOfResolutionBits> ledGreenPwmOutput)
-        : ledRedPwmOutput(ledRedPwmOutput), ledGreenPwmOutput(ledGreenPwmOutput){};
+        : ledRedPwmOutput(ledRedPwmOutput), ledGreenPwmOutput(ledGreenPwmOutput) {};
 
     void startPwmTimer()
     {
@@ -63,23 +63,23 @@ private:
             switch (currentColor)
             {
             case DualLedColor::Red:
-                ledRedPwmOutput.setMaximumPwm();
+                ledRedPwmOutput.setPwmToMaximum();
                 ledGreenPwmOutput.setPwmValue(0);
                 break;
 
             case DualLedColor::Yellow:
-                ledRedPwmOutput.setMaximumPwm();
+                ledRedPwmOutput.setPwmToMaximum();
                 ledGreenPwmOutput.setPwmValue(((1 << NumberOfResolutionBits) - 1) / 3);
                 break;
 
             case DualLedColor::Orange:
-                ledRedPwmOutput.setMaximumPwm();
+                ledRedPwmOutput.setPwmToMaximum();
                 ledGreenPwmOutput.setPwmValue(((1 << NumberOfResolutionBits) - 1) / 8);
                 break;
 
             case DualLedColor::Green:
                 ledRedPwmOutput.setPwmValue(0);
-                ledGreenPwmOutput.setMaximumPwm();
+                ledGreenPwmOutput.setPwmToMaximum();
                 break;
 
             default:
@@ -137,38 +137,38 @@ private:
             switch (currentColor)
             {
             case TripleLedColor::Red:
-                ledRedPwmOutput.setMaximumPwm();
+                ledRedPwmOutput.setPwmToMaximum();
                 ledGreenPwmOutput.setPwmValue(0);
                 ledBluePwmOutput.setPwmValue(0);
                 break;
 
             case TripleLedColor::Yellow:
-                ledRedPwmOutput.setMaximumPwm();
+                ledRedPwmOutput.setPwmToMaximum();
                 ledGreenPwmOutput.setPwmValue(((1 << NumberOfResolutionBits) - 1) / 3);
                 ledBluePwmOutput.setPwmValue(0);
                 break;
 
             case TripleLedColor::Orange:
-                ledRedPwmOutput.setMaximumPwm();
+                ledRedPwmOutput.setPwmToMaximum();
                 ledGreenPwmOutput.setPwmValue(((1 << NumberOfResolutionBits) - 1) / 8);
                 ledBluePwmOutput.setPwmValue(0);
                 break;
 
             case TripleLedColor::Green:
                 ledRedPwmOutput.setPwmValue(0);
-                ledGreenPwmOutput.setMaximumPwm();
+                ledGreenPwmOutput.setPwmToMaximum();
                 ledBluePwmOutput.setPwmValue(0);
                 break;
 
             case TripleLedColor::Blue:
                 ledRedPwmOutput.setPwmValue(0);
                 ledGreenPwmOutput.setPwmValue(0);
-                ledBluePwmOutput.setMaximumPwm();
+                ledBluePwmOutput.setPwmToMaximum();
                 break;
 
             case TripleLedColor::Turquoise:
                 ledRedPwmOutput.setPwmValue(0);
-                ledGreenPwmOutput.setMaximumPwm();
+                ledGreenPwmOutput.setPwmToMaximum();
                 ledBluePwmOutput.setPwmValue(((1 << NumberOfResolutionBits) - 1) / 2);
                 break;
 
@@ -198,4 +198,4 @@ private:
     PwmOutput<NumberOfResolutionBits> ledBluePwmOutput;
 };
 
-} // namespace util::pwm_led
+} // namespace util::led::pwm
