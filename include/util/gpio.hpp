@@ -19,17 +19,17 @@ public:
 
     virtual ~Gpio() = default;
 
-    virtual State read()
+    inline virtual State read()
     {
         return HAL_GPIO_ReadPin(port, pin) == GPIO_PIN_SET ? High : Low;
     }
 
-    virtual void write(State state)
+    inline virtual void write(State state)
     {
         HAL_GPIO_WritePin(port, pin, state == Low ? GPIO_PIN_RESET : GPIO_PIN_SET);
     }
 
-    void toggle()
+    inline void toggle()
     {
         HAL_GPIO_TogglePin(port, pin);
     }
