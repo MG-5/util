@@ -10,6 +10,8 @@ namespace util
 class Button
 {
 public:
+    static constexpr units::si::Time DebounceTime = 20.0_ms;
+
     enum class State
     {
         NotPressed = 0,
@@ -31,8 +33,8 @@ public:
 
     Button(util::Gpio buttonGpio, const units::si::Time longPressTime, bool isInverted = false,
            Callback callback = nullptr)
-        : buttonGpio{buttonGpio}, LongPressTime{longPressTime},
-          isInverted{isInverted}, callback{callback} {};
+        : buttonGpio{buttonGpio}, LongPressTime{longPressTime}, isInverted{isInverted},
+          callback{callback} {};
 
     Button(util::Gpio buttonGpio, const units::si::Time longPressTime,
            const units::si::Time superLongPressTime, bool isInverted = false,
@@ -56,7 +58,6 @@ private:
     [[nodiscard]] units::si::Time getPassedTime() const;
 
     static constexpr units::si::Time TimerReloadValue = 0.0_s;
-    static constexpr units::si::Time DebounceTime = 20.0_ms;
 
     util::Gpio buttonGpio;
     const units::si::Time LongPressTime = 500.0_ms;
