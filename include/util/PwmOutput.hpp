@@ -14,6 +14,7 @@ public:
         : TimerHandle(timerHandle), ChannelNumber(channelNumber)
     {
         SafeAssert(TimerHandle != nullptr);
+        startPwmTimer();
     };
 
     void startPwmTimer() const

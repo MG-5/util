@@ -17,11 +17,6 @@ public:
                        const GammaCorrection<NumberOfResolutionBits> &gammaCorrection)
         : pwmOutput(pwmOutput), gammaCorrection(gammaCorrection) {};
 
-    void startPwmTimer()
-    {
-        pwmOutput.startPwmTimer();
-    }
-
     void setBrightness(uint8_t newBrightness)
     {
         newBrightness > 100 ? brightness = 100 : brightness = newBrightness;
@@ -69,12 +64,6 @@ public:
             const GammaCorrection<NumberOfResolutionBits> &gammaCorrection)
         : ledRedPwmOutput(ledRedPwmOutput), ledGreenPwmOutput(ledGreenPwmOutput),
           gammaCorrection(gammaCorrection) {};
-
-    void startPwmTimer()
-    {
-        ledRedPwmOutput.startPwmTimer();
-        ledGreenPwmOutput.startPwmTimer();
-    }
 
     void setBrightness(uint8_t newBrightness)
     {
@@ -156,13 +145,6 @@ public:
               const GammaCorrection<NumberOfResolutionBits> &gammaCorrection)
         : ledRedPwmOutput(ledRedPwmOutput), ledGreenPwmOutput(ledGreenPwmOutput),
           ledBluePwmOutput(ledBluePwmOutput), gammaCorrection(gammaCorrection) {};
-
-    void startPwmTimer()
-    {
-        ledRedPwmOutput.startPwmTimer();
-        ledGreenPwmOutput.startPwmTimer();
-        ledBluePwmOutput.startPwmTimer();
-    }
 
     void setBrightness(uint8_t newBrightness)
     {
