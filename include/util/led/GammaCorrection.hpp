@@ -34,6 +34,6 @@ public:
         return gammaTable;
     }
 
-    static constexpr GammaTable GammaCorrectionLUT = createGammaTable();
+    static constexpr GammaTable LookUpTable = createGammaTable();
 };
 } // namespace util::led::pwm

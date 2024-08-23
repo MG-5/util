@@ -36,7 +36,7 @@ private:
     {
         const auto BrightnessCorrectedPwmValue = (pwmValue * brightness) / 100;
 
-        return gammaCorrection.GammaCorrectionLUT[BrightnessCorrectedPwmValue];
+        return gammaCorrection.LookUpTable[BrightnessCorrectedPwmValue];
     }
 
     PwmOutput<NumberOfResolutionBits> pwmOutput;
@@ -112,7 +112,7 @@ private:
     {
         const auto BrightnessCorrectedPwmValue = (pwmValue * brightness) / 100;
 
-        return gammaCorrection.GammaCorrectionLUT[BrightnessCorrectedPwmValue];
+        return gammaCorrection.LookUpTable[BrightnessCorrectedPwmValue];
     }
 
     PwmOutput<NumberOfResolutionBits> ledRedPwmOutput;
@@ -218,7 +218,7 @@ private:
     {
         const auto BrightnessCorrectedPwmValue = (pwmValue * brightness) / 100;
 
-        return gammaCorrection.GammaCorrectionLUT[BrightnessCorrectedPwmValue];
+        return gammaCorrection.LookUpTable[BrightnessCorrectedPwmValue];
     }
 
     PwmOutput<NumberOfResolutionBits> ledRedPwmOutput;
