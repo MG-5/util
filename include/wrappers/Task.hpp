@@ -1,11 +1,11 @@
 #pragma once
 
+#include "EventGroup.hpp"
 #include "IFreeRTOSTask.hpp"
 #include "ITaskWithMemberFunction.hpp"
 #include "priorities.hpp"
 
 #include <freertos/FreeRTOS.h>
-#include <freertos/event_groups.h>
 #include <freertos/task.h>
 
 #include <array>
@@ -62,7 +62,7 @@ protected:
 
     static std::array<TaskHandle_t, MaxTasks> taskList;
     static size_t taskListIndex;
-    static EventGroupHandle_t syncEventGroup;
+    inline static EventGroup syncEventGroup;
     static constexpr EventBits_t AllTasksWaitFlag = 1 << 0;
 };
 
@@ -72,7 +72,7 @@ class TaskWithMemberFunctionBase : public Task, public ITaskWithMemberFunction
 {
 public:
     TaskWithMemberFunctionBase(const char *name, uint16_t stackDepth, UBaseType_t priority)
-        : Task(&runTaskStub, name, stackDepth, this, priority){};
+        : Task(&runTaskStub, name, stackDepth, this, priority) {};
 
     [[noreturn]] void taskMain(void *parameters) override = 0;
     static void runTaskStub(void *parameters)
