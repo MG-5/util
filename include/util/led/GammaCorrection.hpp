@@ -7,11 +7,10 @@
 namespace util::led::pwm
 {
 
-template <size_t NumberOfResolutionBits>
+template <size_t NumberOfResolutionBits, float StartOffset = 1.0f>
 class GammaCorrection
 {
 private:
-    static constexpr auto StartOffset = 1.0f;
     static constexpr auto GammaFactor = 2.2f;
 
 public:

@@ -8,13 +8,13 @@ namespace util::led::pwm
 {
 
 //--------------------------------------------------------------------------------------------------
-template <size_t NumberOfResolutionBits>
+template <size_t NumberOfResolutionBits, class GammaCorrection_t>
 class SingleLed : public LedBase
 {
 
 public:
     explicit SingleLed(PwmOutput<NumberOfResolutionBits> pwmOutput,
-                       const GammaCorrection<NumberOfResolutionBits> &gammaCorrection)
+                       const GammaCorrection_t &gammaCorrection)
         : pwmOutput(pwmOutput), gammaCorrection(gammaCorrection) {};
 
     void setBrightness(uint8_t newBrightness)
@@ -46,7 +46,7 @@ private:
     }
 
     PwmOutput<NumberOfResolutionBits> pwmOutput;
-    const GammaCorrection<NumberOfResolutionBits> &gammaCorrection;
+    const GammaCorrection_t &gammaCorrection;
 
     size_t targetPwmValue{pwmOutput.getMaximumPwmValue()};
     uint8_t brightness = 100;
@@ -62,13 +62,13 @@ enum class DualLedColor
 };
 
 //--------------------------------------------------------------------------------------------------
-template <size_t NumberOfResolutionBits>
+template <size_t NumberOfResolutionBits, class GammaCorrection_t>
 class DualLed : public MultiColorLedBase<DualLedColor>
 {
 public:
     DualLed(PwmOutput<NumberOfResolutionBits> ledRedPwmOutput,
             PwmOutput<NumberOfResolutionBits> ledGreenPwmOutput,
-            const GammaCorrection<NumberOfResolutionBits> &gammaCorrection)
+            const GammaCorrection_t &gammaCorrection)
         : ledRedPwmOutput(ledRedPwmOutput), ledGreenPwmOutput(ledGreenPwmOutput),
           gammaCorrection(gammaCorrection) {};
 
@@ -124,7 +124,7 @@ private:
 
     PwmOutput<NumberOfResolutionBits> ledRedPwmOutput;
     PwmOutput<NumberOfResolutionBits> ledGreenPwmOutput;
-    const GammaCorrection<NumberOfResolutionBits> &gammaCorrection;
+    const GammaCorrection_t &gammaCorrection;
 
     uint8_t brightness = 100;
 };
@@ -142,7 +142,7 @@ enum class TripleLedColor
 };
 
 //--------------------------------------------------------------------------------------------------
-template <size_t NumberOfResolutionBits>
+template <size_t NumberOfResolutionBits, class GammaCorrection_t>
 class TripleLed : public MultiColorLedBase<TripleLedColor>
 {
 public:
@@ -231,7 +231,7 @@ private:
     PwmOutput<NumberOfResolutionBits> ledRedPwmOutput;
     PwmOutput<NumberOfResolutionBits> ledGreenPwmOutput;
     PwmOutput<NumberOfResolutionBits> ledBluePwmOutput;
-    const GammaCorrection<NumberOfResolutionBits> &gammaCorrection;
+    const GammaCorrection_t &gammaCorrection;
 
     uint8_t brightness = 100;
 };
