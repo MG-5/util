@@ -22,12 +22,18 @@ public:
         newBrightness > 100 ? brightness = 100 : brightness = newBrightness;
     }
 
+    void setTargetPwmValue(size_t newPwmValue)
+    {
+        targetPwmValue = (newPwmValue > pwmOutput.getMaximumPwmValue())
+                             ? pwmOutput.getMaximumPwmValue()
+                             : newPwmValue;
+    }
+
 private:
     void update() override
     {
         if (isOn)
-            pwmOutput.setPwmValue(
-                applyBrightnessAndGammaCorrection(pwmOutput.getMaximumPwmValue()));
+            pwmOutput.setPwmValue(applyBrightnessAndGammaCorrection(targetPwmValue));
         else
             pwmOutput.setPwmValue(0);
     }
@@ -42,6 +48,7 @@ private:
     PwmOutput<NumberOfResolutionBits> pwmOutput;
     const GammaCorrection<NumberOfResolutionBits> &gammaCorrection;
 
+    size_t targetPwmValue{pwmOutput.getMaximumPwmValue()};
     uint8_t brightness = 100;
 };
 
