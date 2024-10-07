@@ -1,9 +1,8 @@
 #include "wrappers/Task.hpp"
-#include <algorithm>
-#include <core/BuildConfiguration.hpp>
-#include <core/SafeAssert.h>
 #include <helpers/freertos.hpp>
 #include <units/si/time.hpp>
+
+#include <algorithm>
 #include <utility>
 
 namespace util::wrappers
@@ -14,27 +13,24 @@ Task::Task(TaskFunction_t taskCode, const char *name, uint16_t stackDepth, void 
            UBaseType_t priority)
     : IFreeRTOSTask(name, stackDepth, priority), taskCode(taskCode), taskParameter(parameter)
 {
-    SafeAssert(taskCode != nullptr);
+    configASSERT(taskCode != nullptr);
     xTaskCreate(&Task::taskMain, name, stackDepth, reinterpret_cast<void *>(this), priority,
                 &taskHandle);
-    SafeAssert(taskHandle != nullptr);
 
+    configASSERT(taskHandle != nullptr);
     registerTask(taskHandle);
 }
 
 //-----------------------------------------------------------------
 void Task::registerTask(TaskHandle_t handle)
 {
-    if constexpr (core::BuildConfiguration::IsEmbeddedBuild)
+    if (taskListIndex == 0)
     {
-
-        if (taskListIndex == 0)
-        {
-            std::fill(taskList.begin(), taskList.end(), nullptr);
-        }
-        SafeAssert(taskListIndex < taskList.size());
-        taskList.at(taskListIndex++) = handle;
+        std::fill(taskList.begin(), taskList.end(), nullptr);
     }
+
+    configASSERT(taskListIndex < taskList.size());
+    taskList.at(taskListIndex++) = handle;
 }
 
 //-----------------------------------------------------------------
@@ -55,12 +51,8 @@ int32_t Task::notify(const uint32_t ulValue, const NotifyAction eAction)
 int32_t Task::notifyFromISR(const uint32_t ulValue, const NotifyAction eAction,
                             int32_t *pxHigherPriorityTaskWoken)
 {
-#if IS_EMBEDDED_BUILD()
     return xTaskNotifyFromISR(taskHandle, ulValue, notifyActionConverter(eAction),
                               pxHigherPriorityTaskWoken);
-#else
-    return 0;
-#endif
 }
 
 //-----------------------------------------------------------------

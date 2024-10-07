@@ -1,12 +1,11 @@
 #include "wrappers/RecursiveMutex.hpp"
-#include <core/SafeAssert.h>
 #include <utility>
 
 namespace util::wrappers
 {
 RecursiveMutex::RecursiveMutex() : mutexHandle(xSemaphoreCreateRecursiveMutex())
 {
-    SafeAssert(mutexHandle != nullptr);
+    configASSERT(mutexHandle != nullptr);
 }
 
 //-----------------------------------------------------------------

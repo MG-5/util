@@ -1,6 +1,5 @@
 #pragma once
 #include <FreeRTOS.h>
-#include <core/SafeAssert.h>
 #include <span>
 #include <stream_buffer.h>
 

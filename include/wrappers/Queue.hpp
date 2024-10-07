@@ -1,6 +1,5 @@
 #pragma once
 #include <FreeRTOS.h>
-#include <core/SafeAssert.h>
 #include <cstdint>
 #include <optional>
 #include <queue.h>
@@ -14,7 +13,7 @@ class Queue
 public:
     explicit Queue(size_t length) : queueHandle(xQueueCreate(length, sizeof(T)))
     {
-        SafeAssert(queueHandle != nullptr);
+        configASSERT(queueHandle != nullptr);
     };
 
     ~Queue()

@@ -1,7 +1,6 @@
 #pragma once
-#include <core/BuildConfiguration.hpp>
-#include <core/SafeAssert.h>
 
+#include <FreeRTOS.h>
 #include <limits>
 
 namespace util
@@ -13,7 +12,7 @@ public:
     PwmOutput(TIM_HandleTypeDef *const timerHandle, const uint32_t channelNumber)
         : TimerHandle(timerHandle), ChannelNumber(channelNumber)
     {
-        SafeAssert(TimerHandle != nullptr);
+        configASSERT(TimerHandle != nullptr);
         startPwmTimer();
     };
 
@@ -24,8 +23,7 @@ public:
 
     void setPwmValue(size_t pwmValue) const
     {
-        if constexpr (core::BuildConfiguration::IsEmbeddedBuild)
-            __HAL_TIM_SET_COMPARE(TimerHandle, ChannelNumber, pwmValue);
+        __HAL_TIM_SET_COMPARE(TimerHandle, ChannelNumber, pwmValue);
     }
 
     size_t getMaximumPwmValue() const
@@ -35,10 +33,7 @@ public:
 
     void setPwmToMaximum() const
     {
-        if constexpr (core::BuildConfiguration::IsEmbeddedBuild)
-        {
-            __HAL_TIM_SET_COMPARE(TimerHandle, ChannelNumber, getMaximumPwmValue());
-        }
+        __HAL_TIM_SET_COMPARE(TimerHandle, ChannelNumber, getMaximumPwmValue());
     }
 
 private:

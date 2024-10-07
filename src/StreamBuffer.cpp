@@ -7,7 +7,7 @@ namespace util::wrappers
 StreamBuffer::StreamBuffer(const size_t BufferSize, const size_t TriggerLevel)
     : streamHandle(xStreamBufferCreate(BufferSize, TriggerLevel))
 {
-    SafeAssert(streamHandle != nullptr);
+    configASSERT(streamHandle != nullptr);
 }
 
 //-----------------------------------------------------------------
