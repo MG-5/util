@@ -52,6 +52,7 @@ public:
     static void registerTask(TaskHandle_t);
 
     static void applicationIsReadyStartAllTasks();
+    inline static EventGroup syncEventGroup;
 
 protected:
     TaskHandle_t taskHandle{nullptr};
@@ -62,7 +63,6 @@ protected:
 
     static std::array<TaskHandle_t, MaxTasks> taskList;
     static size_t taskListIndex;
-    inline static EventGroup syncEventGroup;
     static constexpr EventBits_t AllTasksWaitFlag = 1 << 0;
 };
 
