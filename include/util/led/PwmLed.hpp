@@ -17,38 +17,33 @@ public:
                        const GammaCorrection_t &gammaCorrection)
         : pwmOutput(pwmOutput), gammaCorrection(gammaCorrection) {};
 
-    void setBrightness(uint8_t newBrightness)
+    void setLightLevel(size_t newLevel)
     {
-        newBrightness > 100 ? brightness = 100 : brightness = newBrightness;
+        currentLightLevel =
+            (newLevel > pwmOutput.getMaximumPwmValue()) ? pwmOutput.getMaximumPwmValue() : newLevel;
     }
 
-    void setTargetPwmValue(size_t newPwmValue)
+    size_t getLightLevel() const
     {
-        targetPwmValue = (newPwmValue > pwmOutput.getMaximumPwmValue())
-                             ? pwmOutput.getMaximumPwmValue()
-                             : newPwmValue;
+        return currentLightLevel;
     }
 
 private:
     void update() override
     {
-        if (isOn)
-            pwmOutput.setPwmValue(applyBrightnessAndGammaCorrection(targetPwmValue));
-        else
-            pwmOutput.setPwmValue(0);
+        pwmOutput.setPwmValue(isOn ? applyGammaCorrection(currentLightLevel) : 0);
     }
 
-    size_t applyBrightnessAndGammaCorrection(size_t pwmValue)
+    size_t applyGammaCorrection(size_t pwmValue)
     {
-        const auto BrightnessCorrectedPwmValue = (pwmValue * brightness) / 100;
-
-        return gammaCorrection.LookUpTable[BrightnessCorrectedPwmValue];
+        return gammaCorrection.LookUpTable[pwmValue];
     }
 
     PwmOutput<NumberOfResolutionBits> pwmOutput;
     const GammaCorrection_t &gammaCorrection;
 
-    size_t targetPwmValue{pwmOutput.getMaximumPwmValue()};
+    size_t currentLightLevel{
+        pwmOutput.getMaximumPwmValue()}; /// has the same amount of steps as PWM
     uint8_t brightness = 100;
 };
 
@@ -87,24 +82,23 @@ private:
             switch (currentColor)
             {
             case DualLedColor::Red:
-                ledRedPwmOutput.setPwmValue(applyBrightnessAndGammaCorrection(MaxPwmValue));
+                ledRedPwmOutput.setPwmValue(applyGammaCorrection(MaxPwmValue));
                 ledGreenPwmOutput.setPwmValue(0);
                 break;
 
             case DualLedColor::Yellow:
-                ledRedPwmOutput.setPwmValue(applyBrightnessAndGammaCorrection(MaxPwmValue));
-                ledGreenPwmOutput.setPwmValue(
-                    applyBrightnessAndGammaCorrection(MaxPwmValue * 100 / 140));
+                ledRedPwmOutput.setPwmValue(applyGammaCorrection(MaxPwmValue));
+                ledGreenPwmOutput.setPwmValue(applyGammaCorrection(MaxPwmValue * 100 / 140));
                 break;
 
             case DualLedColor::Orange:
-                ledRedPwmOutput.setPwmValue(applyBrightnessAndGammaCorrection(MaxPwmValue));
-                ledGreenPwmOutput.setPwmValue(applyBrightnessAndGammaCorrection(MaxPwmValue / 2));
+                ledRedPwmOutput.setPwmValue(applyGammaCorrection(MaxPwmValue));
+                ledGreenPwmOutput.setPwmValue(applyGammaCorrection(MaxPwmValue / 2));
                 break;
 
             case DualLedColor::Green:
                 ledRedPwmOutput.setPwmValue(0);
-                ledGreenPwmOutput.setPwmValue(applyBrightnessAndGammaCorrection(MaxPwmValue));
+                ledGreenPwmOutput.setPwmValue(applyGammaCorrection(MaxPwmValue));
                 break;
             }
         }
@@ -115,7 +109,7 @@ private:
         }
     }
 
-    size_t applyBrightnessAndGammaCorrection(size_t pwmValue)
+    size_t applyGammaCorrection(size_t pwmValue)
     {
         const auto BrightnessCorrectedPwmValue = (pwmValue * brightness) / 100;
 
@@ -168,48 +162,45 @@ private:
             switch (currentColor)
             {
             case TripleLedColor::Red:
-                ledRedPwmOutput.setPwmValue(applyBrightnessAndGammaCorrection(MaxPwmValue));
+                ledRedPwmOutput.setPwmValue(applyGammaCorrection(MaxPwmValue));
                 ledGreenPwmOutput.setPwmValue(0);
                 ledBluePwmOutput.setPwmValue(0);
                 break;
 
             case TripleLedColor::Yellow:
-                ledRedPwmOutput.setPwmValue(applyBrightnessAndGammaCorrection(MaxPwmValue));
-                ledGreenPwmOutput.setPwmValue(
-                    applyBrightnessAndGammaCorrection(MaxPwmValue * 100 / 140));
+                ledRedPwmOutput.setPwmValue(applyGammaCorrection(MaxPwmValue));
+                ledGreenPwmOutput.setPwmValue(applyGammaCorrection(MaxPwmValue * 100 / 140));
                 ledBluePwmOutput.setPwmValue(0);
                 break;
 
             case TripleLedColor::Orange:
-                ledRedPwmOutput.setPwmValue(applyBrightnessAndGammaCorrection(MaxPwmValue));
-                ledGreenPwmOutput.setPwmValue(applyBrightnessAndGammaCorrection(MaxPwmValue / 2));
+                ledRedPwmOutput.setPwmValue(applyGammaCorrection(MaxPwmValue));
+                ledGreenPwmOutput.setPwmValue(applyGammaCorrection(MaxPwmValue / 2));
                 ledBluePwmOutput.setPwmValue(0);
                 break;
 
             case TripleLedColor::Green:
                 ledRedPwmOutput.setPwmValue(0);
-                ledGreenPwmOutput.setPwmValue(applyBrightnessAndGammaCorrection(MaxPwmValue));
+                ledGreenPwmOutput.setPwmValue(applyGammaCorrection(MaxPwmValue));
                 ledBluePwmOutput.setPwmValue(0);
                 break;
 
             case TripleLedColor::Blue:
                 ledRedPwmOutput.setPwmValue(0);
                 ledGreenPwmOutput.setPwmValue(0);
-                ledBluePwmOutput.setPwmValue(applyBrightnessAndGammaCorrection(MaxPwmValue));
+                ledBluePwmOutput.setPwmValue(applyGammaCorrection(MaxPwmValue));
                 break;
 
             case TripleLedColor::Turquoise:
                 ledRedPwmOutput.setPwmValue(0);
-                ledGreenPwmOutput.setPwmValue(applyBrightnessAndGammaCorrection(MaxPwmValue));
-                ledBluePwmOutput.setPwmValue(
-                    applyBrightnessAndGammaCorrection(MaxPwmValue * 100 / 140));
+                ledGreenPwmOutput.setPwmValue(applyGammaCorrection(MaxPwmValue));
+                ledBluePwmOutput.setPwmValue(applyGammaCorrection(MaxPwmValue * 100 / 140));
                 break;
 
             case TripleLedColor::Purple:
-                ledRedPwmOutput.setPwmValue(applyBrightnessAndGammaCorrection(MaxPwmValue));
+                ledRedPwmOutput.setPwmValue(applyGammaCorrection(MaxPwmValue));
                 ledGreenPwmOutput.setPwmValue(0);
-                ledBluePwmOutput.setPwmValue(
-                    applyBrightnessAndGammaCorrection(MaxPwmValue * 100 / 140));
+                ledBluePwmOutput.setPwmValue(applyGammaCorrection(MaxPwmValue * 100 / 140));
                 break;
             }
         }
@@ -221,7 +212,7 @@ private:
         }
     }
 
-    size_t applyBrightnessAndGammaCorrection(size_t pwmValue)
+    size_t applyGammaCorrection(size_t pwmValue)
     {
         const auto BrightnessCorrectedPwmValue = (pwmValue * brightness) / 100;
 
