@@ -60,7 +60,7 @@ private:
     static constexpr units::si::Time TimerReloadValue = 0.0_s;
 
     util::Gpio buttonGpio;
-    const units::si::Time LongPressTime = 500.0_ms;
+    const units::si::Time LongPressTime = 400.0_ms;
     const units::si::Time SuperLongPressTime = 2.0_s;
     bool isInverted = false;
     Callback callback;
