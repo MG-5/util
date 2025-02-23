@@ -1,4 +1,3 @@
 [submodule "gcem"]
 	path = gcem
-	url = ../../kthohr/gcem.git
-	branch = master
+	url = git@github.com:kthohr/gcem.git
