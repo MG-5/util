@@ -53,6 +53,8 @@ public:
 
     static void applicationIsReadyStartAllTasks();
 
+    inline static EventGroup syncEventGroup;
+
 protected:
     TaskHandle_t taskHandle{nullptr};
     TaskFunction_t taskCode{nullptr};
@@ -62,7 +64,6 @@ protected:
 
     inline static std::array<TaskHandle_t, MaxTasks> taskList{};
     inline static size_t taskListIndex = 0;
-    inline static EventGroup syncEventGroup;
     static constexpr EventBits_t AllTasksWaitFlag = 1 << 0;
 };
 
@@ -72,7 +73,7 @@ class TaskWithMemberFunctionBase : public Task, public ITaskWithMemberFunction
 {
 public:
     TaskWithMemberFunctionBase(const char *name, uint16_t stackDepth, UBaseType_t priority)
-        : Task(&runTaskStub, name, stackDepth, this, priority){};
+        : Task(&runTaskStub, name, stackDepth, this, priority) {};
 
     [[noreturn]] void taskMain(void *parameters) override = 0;
     static void runTaskStub(void *parameters)
