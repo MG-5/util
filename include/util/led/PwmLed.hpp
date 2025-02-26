@@ -17,8 +17,18 @@ public:
                        const GammaCorrection_t &gammaCorrection)
         : pwmOutput(pwmOutput), gammaCorrection(gammaCorrection) {};
 
+    void fadeLightLevelTo(size_t newLightLevel)
+    {
+        initialLightLevel = isOn ? currentLightLevel : 0;
+        lightLevelDifference = newLightLevel - initialLightLevel;
+        currentFadeProgress = 0.0_ms;
+        fadingState = true;
+        isOn = true;
+    }
+
     void setLightLevel(size_t newLevel)
     {
+        isOn = newLevel > 0;
         currentLightLevel =
             (newLevel > pwmOutput.getMaximumPwmValue()) ? pwmOutput.getMaximumPwmValue() : newLevel;
     }
@@ -28,9 +38,41 @@ public:
         return currentLightLevel;
     }
 
+    bool isFading() const
+    {
+        return fadingState;
+    }
+
 private:
+    size_t currentLightLevel = 0; /// has the same amount of steps as PWM
+    size_t initialLightLevel = 0;
+    int16_t lightLevelDifference = 0;
+
+    bool fadingState = false;
+
+    static constexpr units::si::Time DelayPerStep = 1.0_ms;
+    static constexpr units::si::Time FadeDuration = 300.0_ms;
+
+    units::si::Time currentFadeProgress = 0.0_ms;
+
     void update() override
     {
+        if (fadingState)
+        {
+            currentFadeProgress += DelayPerStep;
+            currentLightLevel =
+                initialLightLevel +
+                ((currentFadeProgress / FadeDuration) * lightLevelDifference).getMagnitude();
+
+            if (currentLightLevel > pwmOutput.getMaximumPwmValue())
+                currentLightLevel = pwmOutput.getMaximumPwmValue();
+
+            if (currentFadeProgress >= FadeDuration)
+            {
+                fadingState = false;
+            }
+        }
+
         pwmOutput.setPwmValue(isOn ? applyGammaCorrection(currentLightLevel) : 0);
     }
 
@@ -41,10 +83,6 @@ private:
 
     PwmOutput<NumberOfResolutionBits> pwmOutput;
     const GammaCorrection_t &gammaCorrection;
-
-    size_t currentLightLevel{
-        pwmOutput.getMaximumPwmValue()}; /// has the same amount of steps as PWM
-    uint8_t brightness = 100;
 };
 
 //--------------------------------------------------------------------------------------------------
