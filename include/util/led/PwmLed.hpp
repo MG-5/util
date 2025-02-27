@@ -60,9 +60,8 @@ private:
         if (fadingState)
         {
             currentFadeProgress += DelayPerStep;
-            currentLightLevel =
-                initialLightLevel +
-                ((currentFadeProgress / FadeDuration) * lightLevelDifference).getMagnitude();
+            float factor = std::min(currentFadeProgress / FadeDuration, 1.0_).getMagnitude();
+            currentLightLevel = initialLightLevel + factor * lightLevelDifference;
 
             if (currentLightLevel > pwmOutput.getMaximumPwmValue())
                 currentLightLevel = pwmOutput.getMaximumPwmValue();
