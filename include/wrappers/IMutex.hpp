@@ -8,10 +8,12 @@ class IMutex
 public:
     virtual ~IMutex() = default;
 
-    /**
-     * Lock the mutex, waits without timeout for acquisition.
-     */
+    /// @brief  Locks the mutex, waits without timeout for acquisition.
     virtual void lock() = 0;
+
+    /// @brief  Unlocks the mutex from an interrupt service routine, waits without timeout for
+    /// acquisition.
+    virtual void lockFromISR() = 0;
 
     /**
      * Attempts to lock the mutex within given time.
@@ -20,9 +22,16 @@ public:
      */
     virtual bool lockWithTimeout(TickType_t timeToWait) = 0;
 
+    virtual bool lockFromISRWithTimeout(TickType_t timeToWait) = 0;
+
     /**
      * Unlocks the mutex.
      */
     virtual void unlock() = 0;
+
+    /**
+     * Unlocks the mutex from an interrupt service routine.
+     */
+    virtual void unlockFromISR() = 0;
 };
-}
+} // namespace util::wrappers

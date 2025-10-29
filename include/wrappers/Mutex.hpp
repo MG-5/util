@@ -20,8 +20,11 @@ public:
     Mutex &operator=(Mutex &&other) noexcept;
 
     virtual void lock() override;
+    virtual void lockFromISR() override;
     virtual bool lockWithTimeout(TickType_t timeToWait) override;
+    virtual bool lockFromISRWithTimeout(TickType_t timeToWait) override;
     virtual void unlock() override;
+    virtual void unlockFromISR() override;
 
 private:
     SemaphoreHandle_t mutexHandle{nullptr};

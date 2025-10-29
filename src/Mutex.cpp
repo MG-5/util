@@ -24,15 +24,36 @@ void Mutex::lock()
 }
 
 //-----------------------------------------------------------------
+void Mutex::lockFromISR()
+{
+    BaseType_t higherPriorityTaskWoken = pdFALSE;
+    xSemaphoreTakeFromISR(mutexHandle, &higherPriorityTaskWoken);
+    portYIELD_FROM_ISR(higherPriorityTaskWoken);
+}
+
 bool Mutex::lockWithTimeout(const TickType_t timeToWait)
 {
     return xSemaphoreTake(mutexHandle, timeToWait) == pdPASS;
+}
+
+bool Mutex::lockFromISRWithTimeout(const TickType_t timeToWait)
+{
+    BaseType_t higherPriorityTaskWoken = pdFALSE;
+    return xSemaphoreTakeFromISR(mutexHandle, &higherPriorityTaskWoken) == pdPASS;
 }
 
 //-----------------------------------------------------------------
 void Mutex::unlock()
 {
     xSemaphoreGive(mutexHandle);
+}
+
+//-----------------------------------------------------------------
+void Mutex::unlockFromISR()
+{
+    BaseType_t higherPriorityTaskWoken = pdFALSE;
+    xSemaphoreGiveFromISR(mutexHandle, &higherPriorityTaskWoken);
+    portYIELD_FROM_ISR(higherPriorityTaskWoken);
 }
 
 //-----------------------------------------------------------------
