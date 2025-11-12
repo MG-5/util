@@ -2,7 +2,7 @@
 
 #include "IFreeRTOSTask.hpp"
 #include "ITaskWithMemberFunction.hpp"
-#include "priorities.hpp"
+#include "cmsis_os2.h"
 #include "wrappers/EventGroup.hpp"
 
 #include <FreeRTOS.h>
