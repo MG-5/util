@@ -14,6 +14,11 @@ public:
         newState ? turnOn() : turnOff();
     }
 
+    bool getState() const
+    {
+        return isOn;
+    }
+
     /// Turns on LED and resets it's blinking/flash state.
     void turnOn()
     {
@@ -104,6 +109,11 @@ public:
         ledState = LedState::Normal;
         currentColor = ledColor;
         isOn = true;
+    }
+
+    LedColor getColor() const
+    {
+        return currentColor;
     }
 
     /// Enables blinking with given color at given frequency.
