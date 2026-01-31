@@ -56,6 +56,12 @@ int32_t Task::notifyFromISR(const uint32_t ulValue, const NotifyAction eAction,
 }
 
 //-----------------------------------------------------------------
+int32_t Task::clearNotifications()
+{
+    return xTaskNotifyStateClear(taskHandle);
+}
+
+//-----------------------------------------------------------------
 Task::~Task()
 {
     if (taskHandle != nullptr)

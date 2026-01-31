@@ -40,6 +40,7 @@ public:
                           int32_t *pxHigherPriorityTaskWoken) override;
     void notifyGive() override;
     void notifyTake(uint32_t waittime) override;
+    int32_t clearNotifications() override;
     void delay(units::si::Time time) override;
 
     [[nodiscard]] static constexpr eNotifyAction notifyActionConverter(NotifyAction action);

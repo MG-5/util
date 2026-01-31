@@ -22,7 +22,7 @@ class IFreeRTOSTask
 {
 public:
     IFreeRTOSTask(const std::string_view name, uint16_t stackDepth, uint32_t priority)
-        : taskName(name), taskStackDepth(stackDepth), taskPriority(priority){};
+        : taskName(name), taskStackDepth(stackDepth), taskPriority(priority) {};
     virtual ~IFreeRTOSTask() = default;
 
     virtual int32_t notifyWait(uint32_t ulBitsToClearOnEntry, uint32_t ulBitsToClearOnExit,
@@ -35,6 +35,7 @@ public:
 
     virtual void notifyGive() = 0;
     virtual void notifyTake(uint32_t waittime) = 0;
+    virtual int32_t clearNotifications() = 0;
     virtual void delay(units::si::Time time) = 0;
 
 protected:
