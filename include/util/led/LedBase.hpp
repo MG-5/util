@@ -19,6 +19,11 @@ public:
         return isOn;
     }
 
+    bool isBlinking() const
+    {
+        return ledState == LedState::Blinking || ledState ==LedState::Flashing;
+    }
+
     /// Turns on LED and resets it's blinking/flash state.
     void turnOn()
     {
