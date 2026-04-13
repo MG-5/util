@@ -14,14 +14,14 @@ private:
     static constexpr auto GammaFactor = 2.2f;
 
 public:
-    static constexpr auto MaxResolutionValue = (1 << NumberOfResolutionBits) - 1;
+    static constexpr size_t MaxResolutionValue = (1 << NumberOfResolutionBits) - 1;
     using GammaTable = std::array<size_t, MaxResolutionValue + 1>; // +1 for zero
 
     static constexpr GammaTable createGammaTable()
     {
         GammaTable gammaTable{};
 
-        for (auto i = 1; i < MaxResolutionValue + 1; i++)
+        for (size_t i = 1; i < MaxResolutionValue + 1; i++)
         {
             const auto Logarithm = gcem::pow(
                 static_cast<float>(i) / static_cast<float>(MaxResolutionValue), GammaFactor);
