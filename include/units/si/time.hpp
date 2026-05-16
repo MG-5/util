@@ -26,27 +26,27 @@ constexpr auto us = Scale<Time::Unit>{prefixes::inverse::micro};
 constexpr auto ns = Scale<Time::Unit>{prefixes::inverse::nano};
 } // namespace units::si::scale
 
-constexpr units::si::Time operator"" _us(const long double magnitude)
+constexpr units::si::Time operator""_us(const long double magnitude)
 {
     return units::si::Time(magnitude / MicrosecondsPerSecond);
 }
 
-constexpr units::si::Time operator"" _ms(const long double magnitude)
+constexpr units::si::Time operator""_ms(const long double magnitude)
 {
     return units::si::Time(magnitude / MillisecondsPerSecond);
 }
 
-constexpr units::si::Time operator"" _s(const long double magnitude)
+constexpr units::si::Time operator""_s(const long double magnitude)
 {
     return units::si::Time(magnitude);
 }
 
-constexpr units::si::Time operator"" _min(const long double magnitude)
+constexpr units::si::Time operator""_min(const long double magnitude)
 {
     return units::si::Time(magnitude * SecondsPerMinute);
 }
 
-constexpr units::si::Time operator"" _h(const long double magnitude)
+constexpr units::si::Time operator""_h(const long double magnitude)
 {
     return units::si::Time(magnitude * SecondsPerHour);
 }
