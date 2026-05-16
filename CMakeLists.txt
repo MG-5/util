@@ -1,60 +1,19 @@
 cmake_minimum_required(VERSION 3.15)
-cmake_policy(SET CMP0048 NEW)
 
-project(util LANGUAGES CXX C ASM)
+idf_component_register(
+    SRCS
+        "src/Button.cxx"
+        "src/RecursiveMutex.cpp"
+        "src/Mutex.cpp"
+        "src/ScopedLock.cpp"
+        "src/Task.cpp"
+        "src/BinarySemaphore.cpp"
+        "src/StreamBuffer.cpp"
+        "src/EventGroup.cpp"
 
-add_library(${PROJECT_NAME} STATIC
-        src/Button.cxx
-        src/RecursiveMutex.cpp
-        src/Mutex.cpp
-        src/ScopedLock.cpp
-        src/Task.cpp
-        src/BinarySemaphore.cpp
-        src/StreamBuffer.cpp
-        src/EventGroup.cpp
-        )
+    INCLUDE_DIRS
+        "include"
 
-target_include_directories(${PROJECT_NAME} PUBLIC
-        include)
-
-target_link_libraries(${PROJECT_NAME})
-
-if(ESP_PLATFORM)
-  # On ESP-IDF we need the driver component
-  target_link_libraries(${PROJECT_NAME} PRIVATE idf::driver)
-endif()
-
-if (${CMAKE_TESTING_ENABLED})
-    find_package(PkgConfig)
-    pkg_search_module(GTEST REQUIRED gtest)
-    pkg_search_module(GMOCK REQUIRED gmock)
-
-    add_executable(${PROJECT_NAME}_test
-            src/Button.cxx
-            test/src/Button.cxx
-
-            test/src/main.cpp
-            test/src/Angle.cpp
-            test/src/units.cpp
-            test/src/MapValue.cpp
-
-            test/src/stub/hal.cxx
-            )
-        
-    target_compile_features(${PROJECT_NAME}_test PUBLIC cxx_std_20)
-    target_link_libraries(${PROJECT_NAME}_test PRIVATE
-            ${GTEST_LDFLAGS}
-            ${GMOCK_LDFLAGS}
-            gcov
-            core
-            )
-    target_include_directories(${PROJECT_NAME}_test PRIVATE
-            include
-            test/include/mock
-            )
-
-    target_link_options(${PROJECT_NAME}_test PRIVATE --coverage)
-    target_compile_options(${PROJECT_NAME}_test PRIVATE ${GTEST_CFLAGS} ${GMOCK_CFLAGS} --coverage)
-
-    add_test(${PROJECT_NAME}_test ${PROJECT_NAME}_test)
-endif ()
+    PRIV_REQUIRES
+        esp_driver_gpio
+)
