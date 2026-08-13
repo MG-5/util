@@ -39,6 +39,7 @@ public:
     int32_t notifyFromISR(uint32_t ulValue, NotifyAction eAction,
                           int32_t *pxHigherPriorityTaskWoken) override;
     void notifyGive() override;
+    void notifyGiveFromISR(int32_t *pxHigherPriorityTaskWoken) override;
     void notifyTake(uint32_t waittime) override;
     int32_t clearNotifications() override;
     void delay(units::si::Time time) override;

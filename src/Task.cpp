@@ -89,6 +89,12 @@ void Task::notifyGive()
 }
 
 //-----------------------------------------------------------------
+void Task::notifyGiveFromISR(int32_t *pxHigherPriorityTaskWoken)
+{
+    vTaskNotifyGiveFromISR(taskHandle, pxHigherPriorityTaskWoken);
+}
+
+//-----------------------------------------------------------------
 void Task::notifyTake(const uint32_t waittime)
 {
     ulTaskNotifyTake(pdTRUE, waittime);
